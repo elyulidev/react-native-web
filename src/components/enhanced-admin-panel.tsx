@@ -1,5 +1,5 @@
 import type React from "react";
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import {
 	Users,
 	BookOpen,
@@ -11,7 +11,7 @@ import {
 	Edit,
 } from "lucide-react";
 import { QueryClientProvider } from "@tanstack/react-query";
-import { useForm } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { Button } from "./ui/button";
@@ -215,8 +215,8 @@ function UsersPanel() {
 		register,
 		handleSubmit,
 		setValue,
-		watch,
 		reset,
+		control,
 		formState: { errors, isSubmitting, isValid },
 	} = useForm({
 		resolver: zodResolver(
@@ -229,7 +229,7 @@ function UsersPanel() {
 				})
 				.refine((data) => data.password === data.passwordConfirm, {
 					message: t("passwordMatchError"),
-					path: ["paswordConfirm"],
+					path: ["passwordConfirm"],
 				})
 		),
 		defaultValues: {
@@ -238,6 +238,7 @@ function UsersPanel() {
 			password: "",
 			passwordConfirm: "",
 		},
+		mode: "onChange",
 	});
 
 	if (usersError) toast.error(usersError.message, { id: crypto.randomUUID() });
@@ -270,7 +271,7 @@ function UsersPanel() {
 		} else {
 			const userData = {
 				email: data.email,
-				roleId: data.role_id,
+				role_id: data.role_id,
 				password: data.password,
 			};
 			await createUserMutation.mutateAsync(userData);
@@ -299,7 +300,7 @@ function UsersPanel() {
 	const handleCloseModal = () => {
 		setIsModalOpen(false);
 		setEditingUser(null);
-		reset();
+		reset({ email: "", role_id: "", password: "", passwordConfirm: "" });
 	};
 
 	return (
@@ -410,7 +411,7 @@ function UsersPanel() {
 												</Button>
 												<AdminAlertDialog
 													user={user}
-													onContinue={handleDelete}
+													onContinue={() => handleDelete(user)}
 												/>
 												{/* <Button
 													variant='ghost'
@@ -454,7 +455,6 @@ function UsersPanel() {
 						<Input
 							id='email'
 							type='email'
-							value={watch("email")}
 							{...register("email")}
 							placeholder={t("emailPlaceholder")}
 							className={errors.email ? "border-red-500" : ""}
@@ -492,7 +492,7 @@ function UsersPanel() {
 							type='password'
 							{...register("passwordConfirm")}
 							placeholder={t("passwordConfirmPlaceholder")}
-							className={errors.email ? "border-red-500" : ""}
+							className={errors.passwordConfirm ? "border-red-500" : ""}
 						/>
 						{errors.passwordConfirm && (
 							<p className='text-sm text-red-500 mt-1'>
@@ -502,25 +502,33 @@ function UsersPanel() {
 					</div>
 
 					<div className='space-y-1'>
-						<Label htmlFor='role_id'>
-							{}
-							{t("role")}
-						</Label>
-						<Select
-							value={watch("role_id")}
-							onValueChange={(value) => setValue("role_id", value)}
-						>
-							<SelectTrigger className={errors.role_id ? "border-red-500" : ""}>
-								<SelectValue placeholder={t("rolePlaceholder")} />
-							</SelectTrigger>
-							<SelectContent>
-								{roles.map((role) => (
-									<SelectItem key={role.id} value={role.id}>
-										{role.name}
-									</SelectItem>
-								))}
-							</SelectContent>
-						</Select>
+						<Label htmlFor='role_id'>{t("role")}</Label>
+						<Controller
+							name='role_id'
+							control={control}
+							render={({ field: { value, onChange, ...field } }) => (
+								<Select
+									value={value}
+									onValueChange={onChange}
+									{...field}
+									defaultValue={value}
+								>
+									<SelectTrigger
+										className={errors.role_id ? "border-red-500" : ""}
+									>
+										<SelectValue placeholder={t("rolePlaceholder")} />
+									</SelectTrigger>
+									<SelectContent>
+										{roles.map((role) => (
+											<SelectItem key={role.id} value={role.id}>
+												{role.name}
+											</SelectItem>
+										))}
+									</SelectContent>
+								</Select>
+							)}
+						/>
+
 						{errors.role_id && (
 							<p className='text-sm text-red-500 mt-1'>
 								{errors.role_id.message}

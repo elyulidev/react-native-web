@@ -114,6 +114,15 @@ export const getAllRoles = async () => {
 	return await supabase.from("roles").select("*");
 };
 
+export const getRoleByName = async (name: string) => {
+	if (!isSupabaseConfigured) return { data: null, error: null };
+	return await supabase
+		.from("roles")
+		.select("*")
+		.eq("name", name)
+		.maybeSingle();
+};
+
 // --- User CRUD ---
 export async function getAllProfiles(page = 1, limit = 10) {
 	const from = (page - 1) * limit;
@@ -146,16 +155,17 @@ export async function getAllProfiles(page = 1, limit = 10) {
 
 export const updateUserRole = async ({
 	userId,
-	roleId,
+	role_id,
 }: {
 	userId: string;
-	roleId: string;
+	role_id: string;
 }) => {
 	if (!isSupabaseConfigured)
 		return { data: null, error: { message: "Supabase not configured." } };
+
 	return await supabase
 		.from("profiles")
-		.update({ role_id: roleId })
+		.update({ role_id })
 		.eq("id", userId)
 		.select()
 		.single();
@@ -164,11 +174,11 @@ export const updateUserRole = async ({
 export const adminCreateUser = async ({
 	email,
 	password,
-	roleId,
+	role_id,
 }: {
 	email: string;
 	password: string;
-	roleId: string;
+	role_id: string;
 }) => {
 	if (!isSupabaseConfigured)
 		return { data: null, error: { message: "Supabase not configured." } };
@@ -183,7 +193,7 @@ export const adminCreateUser = async ({
 	if (authData.user) {
 		const { data, error } = await updateUserRole({
 			userId: authData.user.id,
-			roleId,
+			role_id,
 		});
 		return { data, error };
 	}
@@ -219,7 +229,7 @@ export const updateUserProfile = async ({
 export const deleteUser = async (userId: string) => {
 	if (!isSupabaseConfigured)
 		return { data: null, error: { message: "Supabase not configured." } };
-	return await supabase.rpc("delete_user_by_id", { user_id: userId });
+	return await supabase.auth.admin.deleteUser(userId);
 };
 
 export const getQuizAttempts = async (

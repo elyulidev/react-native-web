@@ -30,12 +30,7 @@ export default function AdminAlertDialog({
 	return (
 		<AlertDialog>
 			<AlertDialogTrigger asChild>
-				<Button
-					variant='ghost'
-					size='sm'
-
-					//disabled={deleteUser ? true : false}
-				>
+				<Button variant='ghost' size='sm'>
 					<Trash2 className='h-4 w-4' />
 				</Button>
 			</AlertDialogTrigger>

@@ -49,6 +49,7 @@ export const translations = {
 			passwordError: "La contraseña debe tener al menos 8 caracteres",
 			passwordMatchError: "Las contraseñas no coinciden",
 			role: "Rol",
+			rolePlaceholder: "Seleccione un rol",
 			roleError: "Selecione um rol válido",
 			loginSuccess: "¡Bienvenido de nuevo!",
 			signUpSuccess: "¡Revisa tu correo para verificar tu cuenta!",
