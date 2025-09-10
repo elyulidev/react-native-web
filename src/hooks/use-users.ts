@@ -95,8 +95,8 @@ export function useUpdateUserRole() {
 	const { t } = useLanguage();
 
 	return useMutation({
-		mutationFn: ({ userId, roleId }: { userId: string; roleId: string }) =>
-			updateUserRole({ userId, roleId }),
+		mutationFn: ({ userId, role_id }: { userId: string; role_id: string }) =>
+			updateUserRole({ userId, role_id }),
 		onSuccess: () => {
 			queryClient.invalidateQueries({ queryKey: queryKeys.users });
 			toast.success("OK ✅", {

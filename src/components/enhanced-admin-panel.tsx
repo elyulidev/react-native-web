@@ -293,8 +293,8 @@ function UsersPanel() {
 		await deleteUserMutation.mutateAsync(user?.id);
 	};
 
-	const handleRoleChange = async (userId: string, roleId: string) => {
-		await updateUserRoleMutation.mutateAsync({ userId, roleId });
+	const handleRoleChange = async (userId: string, role_id: string) => {
+		await updateUserRoleMutation.mutateAsync({ userId, role_id });
 	};
 
 	const handleCloseModal = () => {
