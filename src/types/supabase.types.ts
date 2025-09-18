@@ -18,33 +18,33 @@ export type Database = {
         Row: {
           assignment_id: string
           content: string | null
-          course_id: string
-          created_at: string | null
-          id: number
+          created_at: string
+          grade: number | null
+          id: string
           user_id: string
         }
         Insert: {
           assignment_id: string
           content?: string | null
-          course_id: string
-          created_at?: string | null
-          id?: never
+          created_at?: string
+          grade?: number | null
+          id?: string
           user_id: string
         }
         Update: {
           assignment_id?: string
           content?: string | null
-          course_id?: string
-          created_at?: string | null
-          id?: never
+          created_at?: string
+          grade?: number | null
+          id?: string
           user_id?: string
         }
         Relationships: [
           {
-            foreignKeyName: "assignment_submissions_course_id_fkey"
-            columns: ["course_id"]
+            foreignKeyName: "assignment_submissions_assignment_id_fkey"
+            columns: ["assignment_id"]
             isOneToOne: false
-            referencedRelation: "courses"
+            referencedRelation: "assignments"
             referencedColumns: ["id"]
           },
           {
@@ -56,38 +56,93 @@ export type Database = {
           },
         ]
       }
+      assignments: {
+        Row: {
+          active: boolean
+          course_id: string
+          created_at: string
+          description: string | null
+          due_date: string | null
+          id: string
+          title: string
+        }
+        Insert: {
+          active?: boolean
+          course_id: string
+          created_at?: string
+          description?: string | null
+          due_date?: string | null
+          id?: string
+          title: string
+        }
+        Update: {
+          active?: boolean
+          course_id?: string
+          created_at?: string
+          description?: string | null
+          due_date?: string | null
+          id?: string
+          title?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "assignments_course_id_fkey"
+            columns: ["course_id"]
+            isOneToOne: false
+            referencedRelation: "courses"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       courses: {
         Row: {
-          created_at: string | null
+          active: boolean
+          created_at: string
           id: string
+          instructor_id: string
           name: string
         }
         Insert: {
-          created_at?: string | null
+          active?: boolean
+          created_at?: string
           id?: string
+          instructor_id: string
           name: string
         }
         Update: {
-          created_at?: string | null
+          active?: boolean
+          created_at?: string
           id?: string
+          instructor_id?: string
           name?: string
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "courses_instructor_id_fkey"
+            columns: ["instructor_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       profiles: {
         Row: {
+          active: boolean
           created_at: string | null
           email: string | null
           id: string
           role_id: string | null
         }
         Insert: {
+          active?: boolean
           created_at?: string | null
           email?: string | null
           id: string
           role_id?: string | null
         }
         Update: {
+          active?: boolean
           created_at?: string | null
           email?: string | null
           id?: string
@@ -106,37 +161,34 @@ export type Database = {
       quiz_attempts: {
         Row: {
           answers: Json | null
-          course_id: string
-          created_at: string | null
-          id: number
+          created_at: string
+          id: string
           quiz_id: string
-          score: number
+          score: number | null
           user_id: string
         }
         Insert: {
           answers?: Json | null
-          course_id: string
-          created_at?: string | null
-          id?: never
+          created_at?: string
+          id?: string
           quiz_id: string
-          score: number
+          score?: number | null
           user_id: string
         }
         Update: {
           answers?: Json | null
-          course_id?: string
-          created_at?: string | null
-          id?: never
+          created_at?: string
+          id?: string
           quiz_id?: string
-          score?: number
+          score?: number | null
           user_id?: string
         }
         Relationships: [
           {
-            foreignKeyName: "quiz_attempts_course_id_fkey"
-            columns: ["course_id"]
+            foreignKeyName: "quiz_attempts_quiz_id_fkey"
+            columns: ["quiz_id"]
             isOneToOne: false
-            referencedRelation: "courses"
+            referencedRelation: "quizzes"
             referencedColumns: ["id"]
           },
           {
@@ -144,6 +196,38 @@ export type Database = {
             columns: ["user_id"]
             isOneToOne: false
             referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      quizzes: {
+        Row: {
+          active: boolean
+          course_id: string
+          created_at: string
+          id: string
+          title: string
+        }
+        Insert: {
+          active?: boolean
+          course_id: string
+          created_at?: string
+          id?: string
+          title: string
+        }
+        Update: {
+          active?: boolean
+          course_id?: string
+          created_at?: string
+          id?: string
+          title?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "quizzes_course_id_fkey"
+            columns: ["course_id"]
+            isOneToOne: false
+            referencedRelation: "courses"
             referencedColumns: ["id"]
           },
         ]
@@ -172,20 +256,17 @@ export type Database = {
       user_course: {
         Row: {
           course_id: string
-          created_at: string | null
-          id: string
+          created_at: string
           user_id: string
         }
         Insert: {
           course_id: string
-          created_at?: string | null
-          id?: string
+          created_at?: string
           user_id: string
         }
         Update: {
           course_id?: string
-          created_at?: string | null
-          id?: string
+          created_at?: string
           user_id?: string
         }
         Relationships: [
@@ -213,6 +294,10 @@ export type Database = {
       delete_user_by_id: {
         Args: { user_id: string }
         Returns: undefined
+      }
+      get_user_role: {
+        Args: Record<PropertyKey, never>
+        Returns: string
       }
       is_admin: {
         Args: Record<PropertyKey, never>
