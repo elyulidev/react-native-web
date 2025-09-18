@@ -241,7 +241,7 @@ function UsersPanel() {
 		mode: "onChange",
 	});
 
-	if (usersError) toast.error(usersError.message, { id: crypto.randomUUID() });
+	if (usersError) toast.error(usersError.message);
 
 	const totalPages = useMemo(() => usersData?.totalPages || 1, [usersData]);
 	const totalItems = useMemo(() => usersData?.count || 0, [usersData]);
@@ -413,17 +413,6 @@ function UsersPanel() {
 													user={user}
 													onContinue={() => handleDelete(user)}
 												/>
-												{/* <Button
-													variant='ghost'
-													size='sm'
-													onClick={() => {
-														console.log(user);
-														setDeleteUser(user);
-													}}
-													//disabled={deleteUser ? true : false}
-												>
-													<Trash2 className='h-4 w-4' />
-												</Button> */}
 											</div>
 										</td>
 									</tr>
@@ -553,9 +542,20 @@ function UsersPanel() {
 // Courses Panel
 function CoursesPanel() {
 	const [isModalOpen, setIsModalOpen] = useState(false);
+	const [searchTerm, setSearchTerm] = useState("");
 	const [editingCourse, setEditingCourse] = useState<Course | null>(null);
+	const { t } = useLanguage();
 
-	const { data: courses = [], isLoading: loading } = useCourses();
+	const {
+		data: courses,
+		isLoading: courseLoading,
+		error: coursesError,
+	} = useCourses(1, 10);
+	const {
+		data: usersData,
+		isLoading: usersLoading,
+		error: usersError,
+	} = useUsers(1, 10);
 	const createCourseMutation = useCreateCourse();
 	const updateCourseMutation = useUpdateCourse();
 	const deleteCourseMutation = useDeleteCourse();
@@ -565,22 +565,40 @@ function CoursesPanel() {
 		handleSubmit,
 		setValue,
 		reset,
-		formState: { errors, isSubmitting },
+		control,
+		formState: { errors, isSubmitting, isValid },
 	} = useForm({
 		resolver: zodResolver(
 			z.object({
 				name: z
 					.string()
-					.min(1, "Course name is required")
-					.max(100, "Course name must be less than 100 characters"),
+					.min(1, "El nombre del curso es requerido")
+					.max(100, "El nombre del curso debe ser menor a 100 carácteres"),
+				instructor_id: z.uuid({
+					error: "El campo instructor_id debe tener formato uuid",
+				}),
 			})
 		),
 		defaultValues: {
 			name: "",
+			instructor_id: "",
 		},
 	});
 
-	const onSubmit = async (data: { name: string }) => {
+	if (usersError) toast.error(usersError.message);
+	if (coursesError) toast.error(coursesError.message);
+
+	const totalPages = useMemo(() => courses?.totalPages || 1, [courses]);
+	const totalItems = useMemo(() => courses?.count || 0, [courses]);
+
+	const filteredCourses = useMemo(() => {
+		if (!searchTerm) return courses?.data || [];
+		return (courses?.data || [])?.filter((course: Course) =>
+			course.name?.toLowerCase().includes(searchTerm.toLowerCase())
+		);
+	}, [searchTerm, courses]);
+
+	const onSubmit = async (data: { name: string; instructor_id: string }) => {
 		if (editingCourse) {
 			await updateCourseMutation.mutateAsync({
 				courseId: editingCourse.id,
@@ -598,11 +616,11 @@ function CoursesPanel() {
 	const handleEdit = (course: Course) => {
 		setEditingCourse(course);
 		setValue("name", course.name);
+		setValue("instructor_id", course.instructor_id);
 		setIsModalOpen(true);
 	};
 
 	const handleDelete = async (course: Course) => {
-		if (!confirm(`Are you sure you want to delete "${course.name}"?`)) return;
 		await deleteCourseMutation.mutateAsync(course.id);
 	};
 
@@ -613,6 +631,11 @@ function CoursesPanel() {
 			render: (course: Course) => (
 				<div className='font-medium'>{course.name}</div>
 			),
+		},
+		{
+			key: "instructor_id",
+			label: "Instructor",
+			render: (user: Profile) => <div className='font-medium'>{user.id}</div>,
 		},
 		{
 			key: "created_at",
@@ -630,13 +653,13 @@ function CoursesPanel() {
 	const handleCloseModal = () => {
 		setIsModalOpen(false);
 		setEditingCourse(null);
-		reset();
+		reset({ name: "", instructor_id: "" });
 	};
 
 	return (
 		<div className='space-y-6'>
 			<div className='flex items-center justify-between'>
-				<h2 className='text-3xl font-bold'>Courses Management</h2>
+				<h2 className='text-3xl font-bold'>{t("adminCourses")}</h2>
 			</div>
 
 			<DataTable
@@ -651,25 +674,63 @@ function CoursesPanel() {
 				onEdit={handleEdit}
 				onDelete={handleDelete}
 				addLabel='Add Course'
-				loading={loading}
+				loading={
+					courseLoading ||
+					usersLoading ||
+					updateCourseMutation.isPending ||
+					isSubmitting
+				}
 			/>
 
 			<Modal
 				isOpen={isModalOpen}
 				onClose={handleCloseModal}
-				title={editingCourse ? "Edit Course" : "Add New Course"}
+				title={editingCourse ? t("adminEditCourse") : t("adminCreateCourse")}
 			>
 				<form onSubmit={handleSubmit(onSubmit)} className='space-y-4'>
 					<div>
-						<Label htmlFor='name'>Course Name</Label>
+						<Label htmlFor='name'>{t("adminTableCourseName")}</Label>
 						<Input
 							id='name'
 							{...register("name")}
-							placeholder='Enter course name'
+							placeholder={t("inputCourseNamePlaceholder")}
 							className={errors.name ? "border-red-500" : ""}
 						/>
 						{errors.name && (
 							<p className='text-sm text-red-500 mt-1'>{errors.name.message}</p>
+						)}
+					</div>
+					<div>
+						<Controller
+							name='instructor_id'
+							control={control}
+							render={({ field: { value, onChange, ...field } }) => (
+								<Select
+									value={value}
+									onValueChange={onChange}
+									defaultValue={value}
+									{...field}
+								>
+									<SelectTrigger
+										className={errors.instructor_id ? "border-red-500" : ""}
+									>
+										<SelectValue placeholder={t("rolePlaceholder")} />
+									</SelectTrigger>
+									<SelectContent>
+										{usersData?.data.map((role) => (
+											<SelectItem key={role.id} value={role.id}>
+												{role?.name}
+											</SelectItem>
+										))}
+									</SelectContent>
+								</Select>
+							)}
+						/>
+
+						{errors.instructor_id && (
+							<p className='text-sm text-red-500 mt-1'>
+								{errors.instructor_id.message}
+							</p>
 						)}
 					</div>
 
