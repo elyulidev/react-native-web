@@ -102,6 +102,8 @@ export const translations = {
 			notificationCourseUpdated: "Curso actualizado con éxito.",
 			notificationCourseDeleted: "Curso eliminado con éxito.",
 			notificationError: "Ocurrió un error. Por favor, inténtalo de nuevo.",
+			//Forms
+			inputCourseNamePlaceholder: "Entra el nombre del curso",
 		},
 		curriculum: esCurriculum,
 	},
@@ -204,6 +206,8 @@ export const translations = {
 			notificationCourseUpdated: "Curso atualizado com sucesso.",
 			notificationCourseDeleted: "Curso excluído com sucesso.",
 			notificationError: "Ocorreu um erro. Por favor, tente novamente.",
+			//Forms
+			inputCourseNamePlaceholder: "Entra el nombre del curso",
 		},
 		curriculum: ptCurriculum,
 	},
