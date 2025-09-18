@@ -4,10 +4,9 @@ import {
 	getUserCourses,
 	assignUserToCourse,
 	removeUserFromCourse,
-	getAllCourses,
 } from "@/services/database";
 import { toast } from "sonner";
-import { getAllProfiles } from "@/services/supabase";
+import { getAllCourses, getAllProfiles } from "@/services/supabase";
 
 export function useUserCourses() {
 	return useQuery({
