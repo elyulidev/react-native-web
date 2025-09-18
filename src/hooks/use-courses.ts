@@ -1,21 +1,26 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 
 import { queryKeys } from "@/lib/react-query";
-import {
-	getAllCourses,
-	createCourse,
-	updateCourse,
-	deleteCourse,
-} from "@/services/database";
+import { createCourse, updateCourse, deleteCourse } from "@/services/database";
 import { toast } from "sonner";
+import { getAllCourses } from "@/services/supabase";
 
-export function useCourses() {
+export function useCourses(page = 1, limit = 10) {
 	return useQuery({
-		queryKey: queryKeys.courses,
+		queryKey: [...queryKeys.courses, page, limit],
 		queryFn: async () => {
-			const { data, error } = await getAllCourses();
+			const { data, error, count, currentPage, totalPages } =
+				await getAllCourses(page, limit);
+
 			if (error) throw error;
-			return data || [];
+
+			return {
+				data,
+				error,
+				count,
+				totalPages,
+				currentPage,
+			};
 		},
 	});
 }
@@ -24,7 +29,7 @@ export function useCreateCourse() {
 	const queryClient = useQueryClient();
 
 	return useMutation({
-		mutationFn: async (courseData: { name: string }) => {
+		mutationFn: async (courseData: { name: string; instructor_id: string }) => {
 			const { data, error } = await createCourse(courseData);
 			if (error) throw error;
 			return data;
