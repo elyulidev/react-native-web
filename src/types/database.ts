@@ -1,3 +1,5 @@
+import type { PostgrestError } from "@supabase/supabase-js";
+
 export interface Role {
 	id: string;
 	name: "admin" | "instructor" | "student";
@@ -8,14 +10,28 @@ export interface Role {
 export interface Course {
 	id: string;
 	name: string;
+	instructor_id: string;
 	created_at?: string;
+}
+
+export interface FetchedTableResponse {
+	data:
+		| Profile[]
+		| Course[]
+		| UserCourse[]
+		| QuizAttempt[]
+		| AssignmentSubmission[]
+		| [];
+	error: PostgrestError | null;
+	count: number;
+	totalPages: number;
+	currentPage: number;
 }
 
 export interface Profile {
 	id: string;
 	email?: string;
 	role_id?: string;
-	roles?: Role;
 	created_at?: string;
 }
 
