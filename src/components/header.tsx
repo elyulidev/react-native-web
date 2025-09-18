@@ -2,14 +2,14 @@ import React, { useState, useRef, useEffect } from "react";
 import {
 	ChatIcon,
 	GlobeAltIcon,
-	UserCircleIcon,
+	/* UserCircleIcon,
 	ArrowRightOnRectangleIcon,
 	ShieldCheckIcon,
-	ChevronDownIcon,
+	ChevronDownIcon, */
 	Bars3Icon,
 } from "./icons";
 import { useLanguage } from "../hooks/useLanguage";
-import { useAuth } from "../hooks/useAuth";
+//import { useAuth } from "../hooks/useAuth";
 import type { Language } from "../types/types";
 
 const LanguageSwitcher: React.FC = () => {
@@ -70,7 +70,7 @@ const LanguageSwitcher: React.FC = () => {
 	);
 };
 
-const UserMenu: React.FC<{ onAdminToggle: () => void }> = ({
+/* const UserMenu: React.FC<{ onAdminToggle: () => void }> = ({
 	onAdminToggle,
 }) => {
 	const { user, signOut, isAdmin } = useAuth();
@@ -143,9 +143,9 @@ const UserMenu: React.FC<{ onAdminToggle: () => void }> = ({
 			)}
 		</div>
 	);
-};
+}; */
 
-const LoginButton: React.FC<{ onClick: () => void }> = ({ onClick }) => {
+/* const LoginButton: React.FC<{ onClick: () => void }> = ({ onClick }) => {
 	const { t } = useLanguage();
 	return (
 		<button
@@ -157,7 +157,7 @@ const LoginButton: React.FC<{ onClick: () => void }> = ({ onClick }) => {
 			<span className='text-sm font-medium hidden sm:inline'>{t("login")}</span>
 		</button>
 	);
-};
+}; */
 
 interface HeaderProps {
 	topicTitle: string;
@@ -173,12 +173,12 @@ export const Header: React.FC<HeaderProps> = ({
 	topicTitle,
 	onChatToggle,
 	isChatOpen,
-	onAdminToggle,
-	onLoginClick,
+	/* onAdminToggle,
+	onLoginClick, */
 	onMenuToggle,
 	children,
 }) => {
-	const { session } = useAuth();
+	//const { session } = useAuth();
 
 	return (
 		<header className='flex items-center justify-between p-4 border-b border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 sticky top-0 z-10'>
@@ -209,11 +209,11 @@ export const Header: React.FC<HeaderProps> = ({
 					<ChatIcon className='w-6 h-6' />
 				</button>
 				<div className='h-6 w-px bg-slate-200 dark:bg-slate-700'></div>
-				{session ? (
+				{/* {session ? (
 					<UserMenu onAdminToggle={onAdminToggle} />
 				) : (
 					<LoginButton onClick={onLoginClick} />
-				)}
+				)} */}
 			</div>
 		</header>
 	);
