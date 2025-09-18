@@ -1,4 +1,4 @@
-import type { UserEdited } from "@/types/database";
+import type { FetchedTableResponse, UserEdited } from "@/types/database";
 import type { QuizAttempt, AssignmentSubmission } from "../types/types";
 import { createClient, SupabaseClient } from "@supabase/supabase-js";
 
@@ -141,6 +141,7 @@ export async function getAllProfiles(page = 1, limit = 10) {
     `,
 			{ count: "exact" }
 		)
+		.eq("active", true)
 		.order("email")
 		.range(from, to);
 
@@ -150,7 +151,7 @@ export async function getAllProfiles(page = 1, limit = 10) {
 		count: count || (0 as number),
 		totalPages: Math.ceil((count || 0) / limit) as number,
 		currentPage: page as number,
-	};
+	} as FetchedTableResponse;
 }
 
 export const updateUserRole = async ({
@@ -269,23 +270,25 @@ export const getAssignmentSubmissions = async (
 
 	return await query.order("created_at", { ascending: false }).range(from, to);
 };
+// Courses CRUD
+export async function getAllCourses(page = 1, limit = 10) {
+	const from = (page - 1) * limit;
+	const to = from + limit - 1;
 
-export const getCourses = async (page: number) => {
-	if (!isSupabaseConfigured) return { data: [], count: 0, error: null };
-	const from = (page - 1) * PAGE_SIZE;
-	const to = from + PAGE_SIZE - 1;
-	return await supabase
+	const { data, error, count } = await supabase
 		.from("courses")
 		.select("*", { count: "exact" })
 		.order("name")
 		.range(from, to);
-};
 
-// Used for filters, fetches all courses without pagination
-export const getAllCourses = async () => {
-	if (!isSupabaseConfigured) return { data: [], error: null };
-	return await supabase.from("courses").select("id, name").order("name");
-};
+	return {
+		data: data || [],
+		error,
+		count: count || (0 as number),
+		totalPages: Math.ceil((count || 0) / limit) as number,
+		currentPage: page as number,
+	} as FetchedTableResponse;
+}
 
 export const createCourse = async (name: string) => {
 	if (!isSupabaseConfigured)
