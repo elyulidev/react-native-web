@@ -1,4 +1,4 @@
-import type { Role, Course } from "@/types/database";
+import type { Role, Course, FetchedTableResponse } from "@/types/database";
 import { supabase } from "./supabase";
 
 // Roles CRUD
@@ -21,11 +21,6 @@ export async function updateRole(id: string, updates: Partial<Role>) {
 
 export async function deleteRole(id: string) {
 	return await supabase.from("roles").delete().eq("id", id);
-}
-
-// Courses CRUD
-export async function getAllCourses() {
-	return await supabase.from("courses").select("*").order("name");
 }
 
 export async function createCourse(course: Omit<Course, "id" | "created_at">) {
