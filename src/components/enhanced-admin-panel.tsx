@@ -26,7 +26,7 @@ import {
 } from "./ui/select";
 import { Modal } from "./ui/modal";
 import { Pagination } from "./ui/pagination";
-import { DataTable } from "./ui/data-table";
+//import { DataTable } from "./ui/data-table";
 import {
 	useUsers,
 	useRoles,
@@ -37,34 +37,34 @@ import {
 } from "@/hooks/use-users";
 import { queryClient } from "@/lib/react-query";
 import type {
-	Course,
+	//Course,
 	Profile,
-	UserCourse,
-	QuizAttempt,
-	AssignmentSubmission,
+	//UserCourse,
+	/* QuizAttempt,
+	AssignmentSubmission, */
 	UserEdited,
 } from "@/types/database";
-import {
+/* import {
 	useCourses,
 	useCreateCourse,
 	useDeleteCourse,
 	useUpdateCourse,
-} from "@/hooks/use-courses";
-import {
+} from "@/hooks/use-courses"; */
+/* import {
 	useAssignUserToCourse,
 	useCoursesForEnrollment,
 	useProfiles,
 	useRemoveUserFromCourse,
 	useUserCourses,
-} from "@/hooks/use-user-courses";
-import {
+} from "@/hooks/use-user-courses"; */
+/* import {
 	useDeleteQuizAttempt,
 	useQuizAttempts,
 } from "@/hooks/use-quiz-attempts";
 import {
 	useAssignmentSubmissions,
 	useDeleteAssignmentSubmission,
-} from "@/hooks/use-assignments";
+} from "@/hooks/use-assignments"; */
 import AdminAlertDialog from "./admin-alert-dialog";
 import { useLanguage } from "@/hooks/use-language";
 import { Spinner } from "./spinner";
@@ -150,10 +150,10 @@ function EnhancedAdminPanelContent({ onClose }: EnhancedAdminPanelProps) {
 				<main className='flex-1 overflow-y-auto p-6'>
 					<div className='max-w-7xl mx-auto'>
 						{activeTab === "users" && <UsersPanel />}
-						{activeTab === "courses" && <CoursesPanel />}
-						{activeTab === "user-courses" && <UserCoursesPanel />}
-						{activeTab === "quizzes" && <QuizAttemptsPanel />}
-						{activeTab === "assignments" && <AssignmentsPanel />}
+						{/* {activeTab === "courses" && <CoursesPanel />} */}
+						{/* {activeTab === "user-courses" && <UserCoursesPanel />} */}
+						{/* {activeTab === "quizzes" && <QuizAttemptsPanel />} */}
+						{/* {activeTab === "assignments" && <AssignmentsPanel />} */}
 					</div>
 				</main>
 			</div>
@@ -540,9 +540,9 @@ function UsersPanel() {
 }
 
 // Courses Panel
-function CoursesPanel() {
+/* function CoursesPanel() {
 	const [isModalOpen, setIsModalOpen] = useState(false);
-	const [searchTerm, setSearchTerm] = useState("");
+	//const [searchTerm, setSearchTerm] = useState("");
 	const [editingCourse, setEditingCourse] = useState<Course | null>(null);
 	const { t } = useLanguage();
 
@@ -566,7 +566,7 @@ function CoursesPanel() {
 		setValue,
 		reset,
 		control,
-		formState: { errors, isSubmitting, isValid },
+		formState: { errors, isSubmitting },
 	} = useForm({
 		resolver: zodResolver(
 			z.object({
@@ -719,7 +719,7 @@ function CoursesPanel() {
 									<SelectContent>
 										{usersData?.data.map((role) => (
 											<SelectItem key={role.id} value={role.id}>
-												{role?.name}
+												{role?.name || "N/A"}
 											</SelectItem>
 										))}
 									</SelectContent>
@@ -746,10 +746,10 @@ function CoursesPanel() {
 			</Modal>
 		</div>
 	);
-}
+} */
 
 // User Courses Panel
-function UserCoursesPanel() {
+/* function UserCoursesPanel() {
 	const [isModalOpen, setIsModalOpen] = useState(false);
 
 	const { data: userCourses = [], isLoading: loading } = useUserCourses();
@@ -918,10 +918,10 @@ function UserCoursesPanel() {
 			</Modal>
 		</div>
 	);
-}
+} */
 
 // Quiz Attempts Panel
-function QuizAttemptsPanel() {
+/* function QuizAttemptsPanel() {
 	const { data: attempts = [], isLoading: loading } = useQuizAttempts();
 	const deleteAttemptMutation = useDeleteQuizAttempt();
 
@@ -992,10 +992,10 @@ function QuizAttemptsPanel() {
 			/>
 		</div>
 	);
-}
+} */
 
 // Assignments Panel
-function AssignmentsPanel() {
+/* function AssignmentsPanel() {
 	const { data: submissions = [], isLoading: loading } =
 		useAssignmentSubmissions();
 	const deleteSubmissionMutation = useDeleteAssignmentSubmission();
@@ -1064,4 +1064,4 @@ function AssignmentsPanel() {
 			/>
 		</div>
 	);
-}
+} */

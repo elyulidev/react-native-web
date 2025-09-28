@@ -10,7 +10,7 @@ import { Spinner } from "./components/spinner";
 import { useLanguage } from "./hooks/use-language";
 import { useAuth } from "./hooks/use-auth";
 import type { CurriculumTopic } from "./types/types";
-import { EnhancedAdminPanel } from "./components/enhanced-admin-panel";
+//import { EnhancedAdminPanel } from "./components/enhanced-admin-panel";
 import { Navigate, Route, Routes } from "react-router-dom";
 import BibliographyPage from "./pages/bibliography-page";
 
@@ -62,7 +62,7 @@ const App: React.FC = () => {
 	}
 
 	if (isAdminPanelOpen && session && isAdmin) {
-		return <EnhancedAdminPanel onClose={() => setAdminPanelOpen(false)} />;
+		//return <EnhancedAdminPanel onClose={() => setAdminPanelOpen(false)} />;
 	}
 
 	return (

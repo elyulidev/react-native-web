@@ -57,7 +57,7 @@ export interface QuizAttempt {
 	course_id: string;
 	quiz_id: string;
 	score: number;
-	answers?: any;
+	answers?: unknown;
 	created_at?: string;
 	profiles?: Profile;
 	courses?: Course;

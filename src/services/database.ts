@@ -1,4 +1,4 @@
-import type { Role, Course, FetchedTableResponse } from "@/types/database";
+import type { Role, Course } from "@/types/database";
 import { supabase } from "./supabase";
 
 // Roles CRUD
