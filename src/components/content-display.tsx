@@ -46,8 +46,8 @@ import {
 	MagnifyingGlassPlusIcon,
 	WindowIcon,
 } from "./icons";
-import { useLanguage } from "../hooks/useLanguage";
-import { useAuth } from "../hooks/useAuth";
+import { useLanguage } from "../hooks/use-language";
+import { useAuth } from "../hooks/use-auth";
 import { Spinner } from "./spinner";
 
 // Map icon names from data to actual components

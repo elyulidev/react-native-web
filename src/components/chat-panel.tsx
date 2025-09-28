@@ -3,7 +3,7 @@ import { Chat } from "@google/genai";
 import { createChatSession, sendMessageToAI } from "../services/geminiService";
 import type { ChatMessage } from "../types/types";
 import { SendIcon, CloseIcon, BotIcon } from "./icons";
-import { useLanguage } from "../hooks/useLanguage";
+import { useLanguage } from "../hooks/use-language";
 
 interface ChatPanelProps {
 	isOpen: boolean;

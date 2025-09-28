@@ -7,10 +7,12 @@ import { MoonIcon, SunIcon } from "./components/icons";
 import { Auth } from "./components/auth";
 //import { AdminPanel } from "./components/AdminPanel";
 import { Spinner } from "./components/spinner";
-import { useLanguage } from "./hooks/useLanguage";
-import { useAuth } from "./hooks/useAuth";
+import { useLanguage } from "./hooks/use-language";
+import { useAuth } from "./hooks/use-auth";
 import type { CurriculumTopic } from "./types/types";
 import { EnhancedAdminPanel } from "./components/enhanced-admin-panel";
+import { Navigate, Route, Routes } from "react-router-dom";
+import BibliographyPage from "./pages/bibliography-page";
 
 const App: React.FC = () => {
 	const { curriculum, selectedTopic, handleTopicSelect } = useLanguage();
@@ -95,10 +97,28 @@ const App: React.FC = () => {
 						</button>
 					</Header>
 					<main className='flex-1 overflow-y-auto p-4 sm:p-6 lg:p-8'>
-						<ContentDisplay
-							topic={selectedTopic}
-							onLoginRequest={() => setAuthModalOpen(true)}
-						/>
+						<Routes>
+							<Route
+								path='/'
+								element={
+									<ContentDisplay
+										topic={selectedTopic}
+										onLoginRequest={() => setAuthModalOpen(true)}
+									/>
+								}
+							/>
+							<Route
+								path='/:id'
+								element={
+									<ContentDisplay
+										topic={selectedTopic}
+										onLoginRequest={() => setAuthModalOpen(true)}
+									/>
+								}
+							/>
+							<Route path='/bibliografia' element={<BibliographyPage />} />
+							<Route path='*' element={<Navigate to='/' />} />
+						</Routes>
 					</main>
 				</div>
 				<ChatPanel

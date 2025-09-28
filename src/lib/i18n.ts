@@ -104,6 +104,8 @@ export const translations = {
 			notificationError: "Ocurrió un error. Por favor, inténtalo de nuevo.",
 			//Forms
 			inputCourseNamePlaceholder: "Entra el nombre del curso",
+			"bibliography.title": "Bibliografía del Curso",
+			"bibliography.downloadButton": "Descargar",
 		},
 		curriculum: esCurriculum,
 	},
@@ -208,6 +210,9 @@ export const translations = {
 			notificationError: "Ocorreu um erro. Por favor, tente novamente.",
 			//Forms
 			inputCourseNamePlaceholder: "Entra el nombre del curso",
+			// BibliographyPage
+			"bibliography.title": "Bibliografia do Curso",
+			"bibliography.downloadButton": "Baixar",
 		},
 		curriculum: ptCurriculum,
 	},

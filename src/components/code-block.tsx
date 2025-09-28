@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { vscDarkPlus } from "react-syntax-highlighter/dist/esm/styles/prism";
 import { CopyIcon, CheckIcon } from "./icons";
-import { useLanguage } from "../hooks/useLanguage";
+import { useLanguage } from "../hooks/use-language";
 
 interface CodeBlockProps {
 	code: string;

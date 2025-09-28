@@ -131,3 +131,37 @@
 		@apply bg-background text-foreground;
 	}
 }
+
+aside .overflow-y-auto::-webkit-scrollbar {
+	width: 10px;
+}
+
+aside .overflow-y-auto::-webkit-scrollbar-track {
+	background-color: transparent;
+}
+
+aside .overflow-y-auto::-webkit-scrollbar-thumb {
+	background-color: #d1d5db; /* gray-300 */
+	border-radius: 5px;
+	border: 2px solid transparent;
+	background-clip: content-box;
+}
+.dark aside .overflow-y-auto::-webkit-scrollbar-thumb {
+	background-color: #4b5563; /* gray-600 */
+}
+
+aside .overflow-y-auto::-webkit-scrollbar-thumb:hover {
+	background-color: #9ca3af; /* gray-400 */
+}
+.dark aside .overflow-y-auto::-webkit-scrollbar-thumb:hover {
+	background-color: #6b7280; /* gray-500 */
+}
+
+/* For Firefox */
+aside .overflow-y-auto {
+	scrollbar-width: thin;
+	scrollbar-color: #d1d5db transparent;
+}
+.dark aside .overflow-y-auto {
+	scrollbar-color: #4b5563 transparent;
+}

@@ -8,7 +8,7 @@ import {
 	ChevronDownIcon, */
 	Bars3Icon,
 } from "./icons";
-import { useLanguage } from "../hooks/useLanguage";
+import { useLanguage } from "../hooks/use-language";
 //import { useAuth } from "../hooks/useAuth";
 import type { Language } from "../types/types";
 

@@ -66,7 +66,7 @@ import {
 	useDeleteAssignmentSubmission,
 } from "@/hooks/use-assignments";
 import AdminAlertDialog from "./admin-alert-dialog";
-import { useLanguage } from "@/hooks/useLanguage";
+import { useLanguage } from "@/hooks/use-language";
 import { Spinner } from "./spinner";
 import { toast } from "sonner";
 

@@ -1,14 +1,13 @@
 import { GoogleGenAI, Chat, GenerateContentResponse } from "@google/genai";
 import type { Language } from "../types/types";
 
-/* const API_KEY = process.env.API_KEY;
+const API_KEY = import.meta.env.VITE_GEMINI_API_KEY;
 
 if (!API_KEY) {
 	console.error("API_KEY is not set in environment variables.");
-} */
+}
 
-const ai = new GoogleGenAI({ apiKey: "" });
-//const ai = new GoogleGenAI({ apiKey: API_KEY! });
+const ai = new GoogleGenAI({ apiKey: API_KEY! });
 
 const systemInstructions = {
 	es: `Eres un asistente experto y amigable para estudiantes universitarios que aprenden a programar con React Native y Expo. Tu objetivo es explicar conceptos de forma clara y concisa. Responde siempre en español. No uses markdown en tus respuestas.`,

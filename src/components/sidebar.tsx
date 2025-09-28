@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { ReactNativeIcon, ChevronDownIcon, CloseIcon } from "./icons";
-import { useLanguage } from "../hooks/useLanguage";
+import { useLanguage } from "../hooks/use-language";
 import type { CurriculumModule, CurriculumTopic } from "../types/types";
+import { NavLink } from "react-router-dom";
 
 interface SidebarProps {
 	curriculum: {
@@ -78,16 +79,20 @@ export const Sidebar: React.FC<SidebarProps> = ({
 				</button>
 			</div>
 			<nav className='space-y-1 flex-1 overflow-y-auto'>
-				<button
+				<NavLink
+					to={`/${curriculum.objetivoGeneral.id}`}
 					onClick={() => onTopicSelect(curriculum.objetivoGeneral)}
-					className={`${baseButtonClass} ${
-						isTopicSelected(curriculum.objetivoGeneral)
-							? selectedClass
-							: unselectedClass
-					}`}
 				>
-					{curriculum.objetivoGeneral.title}
-				</button>
+					<button
+						className={`${baseButtonClass} ${
+							isTopicSelected(curriculum.objetivoGeneral)
+								? selectedClass
+								: unselectedClass
+						}`}
+					>
+						{curriculum.objetivoGeneral.title}
+					</button>
+				</NavLink>
 
 				{curriculum.modules.map((module) => {
 					const isExpanded = expandedModule === module.id;
@@ -109,19 +114,21 @@ export const Sidebar: React.FC<SidebarProps> = ({
 							{isExpanded && (
 								<ul className='pl-3 mt-1 space-y-1 border-l border-slate-200 dark:border-slate-700 ml-3'>
 									<li>
-										<button
-											onClick={() => onTopicSelect(module.overview)}
-											className={`${baseButtonClass} ${
-												isTopicSelected(module.overview)
-													? selectedClass
-													: unselectedClass
-											}`}
-										>
-											{t("moduleOverview")}
-										</button>
+										<NavLink to={`/${module.overview.id}`}>
+											<button
+												onClick={() => onTopicSelect(module.overview)}
+												className={`${baseButtonClass} ${
+													isTopicSelected(module.overview)
+														? selectedClass
+														: unselectedClass
+												}`}
+											>
+												{t("moduleOverview")}
+											</button>
+										</NavLink>
 									</li>
 									{module.conferences.map((topic) => (
-										<li key={topic.id}>
+										<NavLink to={`/${topic.id}`} key={topic.id}>
 											<button
 												onClick={() => onTopicSelect(topic)}
 												className={`${baseButtonClass} ${
@@ -132,7 +139,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
 											>
 												{topic.title}
 											</button>
-										</li>
+										</NavLink>
 									))}
 								</ul>
 							)}

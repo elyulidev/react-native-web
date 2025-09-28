@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { supabase } from "../services/supabase";
 import { ReactNativeIcon, CloseIcon } from "./icons";
-import { useLanguage } from "../hooks/useLanguage";
+import { useLanguage } from "../hooks/use-language";
 
 interface AuthProps {
 	onAuthSuccess: () => void;

@@ -3,7 +3,7 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { queryKeys } from "@/lib/react-query";
 import { toast } from "sonner";
-import { useLanguage } from "./useLanguage";
+import { useLanguage } from "./use-language";
 import {
 	adminCreateUser,
 	deleteUser,
