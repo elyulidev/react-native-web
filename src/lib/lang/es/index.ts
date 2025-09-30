@@ -250,7 +250,7 @@ const evaluations: CurriculumTopic = {
 					description:
 						"Este documento contiene el informe detallado de las evaluaciones parcial y final del curso en español.",
 					buttonText: "Descargar PDF",
-					url: "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf",
+					url: "https://kvskvfok8cknjmpl.public.blob.vercel-storage.com/Opcional%20I%20-%20ES.pdf",
 				},
 				{
 					lang: "pt",
@@ -258,7 +258,7 @@ const evaluations: CurriculumTopic = {
 					description:
 						"Este documento contém o relatório detalhado das avaliações parcial e final do curso em português.",
 					buttonText: "Baixar PDF",
-					url: "https://www.adobe.com/support/products/enterprise/knowledgecenter/media/c4611_sample_explain.pdf",
+					url: "https://kvskvfok8cknjmpl.public.blob.vercel-storage.com/Opcional%20I.pdf",
 				},
 			],
 		},
@@ -279,19 +279,17 @@ const bibliography: CurriculumTopic = {
 			bibliographyCards: [
 				{
 					type: "pdf",
-					title: "React Native en Acción",
-					description:
-						"Un libro completo que cubre los fundamentos y patrones avanzados para construir aplicaciones de alta calidad con React Native.",
+					title: "Learning React Native	- 2nd Edition",
+					description: "Building Native Mobile Apps with JavaScript",
 					buttonText: "Descargar PDF",
-					url: "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf",
+					url: "https://kvskvfok8cknjmpl.public.blob.vercel-storage.com/Learning%20React%20Native%20-%20building%20Native%20mobile%20apps%20with%20--%20Eisenman%2C%20Bonnie%20--%20%28%20WeLib.org%20%29.pdf",
 				},
 				{
 					type: "pdf",
-					title: "Bases de Datos con SQLite",
-					description:
-						"Aprende a diseñar y gestionar bases de datos relacionales locales, un recurso esencial para la persistencia de datos offline.",
+					title: "Introducing SQLite for Mobile Developers",
+					description: "Enabling Database Functionality for Android and iPhone",
 					buttonText: "Descargar PDF",
-					url: "https://www.adobe.com/support/products/enterprise/knowledgecenter/media/c4611_sample_explain.pdf",
+					url: "https://kvskvfok8cknjmpl.public.blob.vercel-storage.com/Introducing%20SQLite%20for%20mobile%20developers%20-%20enabling%20database%20--%20Jesse%20Feiler%20--%20%28%20WeLib.org%20%29.pdf",
 				},
 				{
 					type: "link",
@@ -299,7 +297,7 @@ const bibliography: CurriculumTopic = {
 					description:
 						"La fuente de verdad para todo lo relacionado con React Native. Imprescindible para consultar APIs de componentes y guías.",
 					buttonText: "Visitar Sitio",
-					url: "https://reactnative.dev/",
+					url: "https://reactnative.dev/docs/getting-started",
 				},
 				{
 					type: "link",
