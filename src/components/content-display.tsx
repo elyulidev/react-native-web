@@ -45,6 +45,8 @@ import {
 	RectangleStackIcon,
 	MagnifyingGlassPlusIcon,
 	WindowIcon,
+	ArrowDownTrayIcon,
+	ArrowTopRightOnSquareIcon,
 } from "./icons";
 import { useLanguage } from "../hooks/use-language";
 import { useAuth } from "../hooks/use-auth";
@@ -786,6 +788,66 @@ const ContentPartRenderer: React.FC<{
 					initialCode={part.code}
 					onLoginRequest={onLoginRequest}
 				/>
+			);
+		case "evaluationCards":
+			return (
+				<div className='grid md:grid-cols-2 gap-6 my-8'>
+					{part.evaluationCards?.map((card) => (
+						<div
+							key={card.lang}
+							className='bg-slate-100 dark:bg-slate-800/50 rounded-lg border border-slate-200 dark:border-slate-700 p-6 flex flex-col'
+						>
+							<h3 className='text-xl font-bold text-slate-900 dark:text-white mb-2'>
+								{card.title}
+							</h3>
+							<p className='text-slate-600 dark:text-slate-300 mb-6 flex-1'>
+								{card.description}
+							</p>
+							<a
+								href={card.url}
+								download
+								target='_blank'
+								rel='noopener noreferrer'
+								className='inline-flex items-center justify-center gap-2 px-6 py-3 bg-primary-500 text-white font-semibold rounded-lg hover:bg-primary-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 dark:focus:ring-offset-slate-800 transition-colors'
+							>
+								<ArrowDownTrayIcon className='w-5 h-5' />
+								{card.buttonText}
+							</a>
+						</div>
+					))}
+				</div>
+			);
+		case "bibliographyCards":
+			return (
+				<div className='grid md:grid-cols-2 gap-6 my-8'>
+					{part.bibliographyCards?.map((card, index) => (
+						<div
+							key={index}
+							className='bg-slate-100 dark:bg-slate-800/50 rounded-lg border border-slate-200 dark:border-slate-700 p-6 flex flex-col'
+						>
+							<h3 className='text-xl font-bold text-slate-900 dark:text-white mb-2'>
+								{card.title}
+							</h3>
+							<p className='text-slate-600 dark:text-slate-300 mb-6 flex-1'>
+								{card.description}
+							</p>
+							<a
+								href={card.url}
+								download={card.type === "pdf"}
+								target='_blank'
+								rel='noopener noreferrer'
+								className='inline-flex items-center justify-center gap-2 px-6 py-3 bg-primary-500 text-white font-semibold rounded-lg hover:bg-primary-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 dark:focus:ring-offset-slate-800 transition-colors'
+							>
+								{card.type === "pdf" ? (
+									<ArrowDownTrayIcon className='w-5 h-5' />
+								) : (
+									<ArrowTopRightOnSquareIcon className='w-5 h-5' />
+								)}
+								{card.buttonText}
+							</a>
+						</div>
+					))}
+				</div>
 			);
 		default:
 			return null;

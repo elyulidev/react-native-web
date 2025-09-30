@@ -106,6 +106,8 @@ export const translations = {
 			inputCourseNamePlaceholder: "Entra el nombre del curso",
 			"bibliography.title": "Bibliografía del Curso",
 			"bibliography.downloadButton": "Descargar",
+			evaluationsTitle: "Evaluaciones",
+			bibliographyTitle: "Bibliografía",
 		},
 		curriculum: esCurriculum,
 	},
@@ -213,6 +215,8 @@ export const translations = {
 			// BibliographyPage
 			"bibliography.title": "Bibliografia do Curso",
 			"bibliography.downloadButton": "Baixar",
+			evaluationsTitle: "Avaliações",
+			bibliographyTitle: "Bibliografia",
 		},
 		curriculum: ptCurriculum,
 	},

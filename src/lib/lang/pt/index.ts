@@ -233,7 +233,91 @@ const modules: CurriculumModule[] = [
 	},
 ];
 
+const evaluations: CurriculumTopic = {
+	id: "evaluations",
+	title: "Avaliações",
+	content: [
+		{ type: "heading", text: "Download de Material de Avaliação" },
+		{
+			type: "paragraph",
+			text: "Aqui você pode encontrar os relatórios de avaliação do curso. Por favor, baixe a versão correspondente ao seu idioma.",
+		},
+		{
+			type: "evaluationCards",
+			evaluationCards: [
+				{
+					lang: "es",
+					title: "Informe de Evaluaciones",
+					description:
+						"Este documento contiene el informe detallado de las evaluaciones parcial y final del curso en español.",
+					buttonText: "Descargar PDF",
+					url: "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf",
+				},
+				{
+					lang: "pt",
+					title: "Relatório de Avaliações",
+					description:
+						"Este documento contém o relatório detalhado das avaliações parcial e final do curso em português.",
+					buttonText: "Baixar PDF",
+					url: "https://www.adobe.com/support/products/enterprise/knowledgecenter/media/c4611_sample_explain.pdf",
+				},
+			],
+		},
+	],
+};
+
+const bibliography: CurriculumTopic = {
+	id: "bibliography",
+	title: "Bibliografia",
+	content: [
+		{ type: "heading", text: "Bibliografia e Recursos Adicionais" },
+		{
+			type: "paragraph",
+			text: "Aqui encontrará uma coleção de livros e documentação oficial recomendada para aprofundar os temas do bootcamp.",
+		},
+		{
+			type: "bibliographyCards",
+			bibliographyCards: [
+				{
+					type: "pdf",
+					title: "React Native em Ação",
+					description:
+						"Um livro completo que abrange os fundamentos e padrões avançados para construir aplicações de alta qualidade com React Native.",
+					buttonText: "Baixar PDF",
+					url: "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf",
+				},
+				{
+					type: "pdf",
+					title: "Bases de Dados com SQLite",
+					description:
+						"Aprenda a projetar e gerir bases de dados relacionais locais, um recurso essencial para a persistência de dados offline.",
+					buttonText: "Baixar PDF",
+					url: "https://www.adobe.com/support/products/enterprise/knowledgecenter/media/c4611_sample_explain.pdf",
+				},
+				{
+					type: "link",
+					title: "Documentação Oficial do React Native",
+					description:
+						"A fonte da verdade para tudo relacionado ao React Native. Indispensável para consultar APIs de componentes e guias.",
+					buttonText: "Visitar Site",
+					url: "https://reactnative.dev/",
+				},
+				{
+					type: "link",
+					title: "Documentação Oficial do Expo",
+					description:
+						"Explore o ecossistema Expo, desde o roteamento até o acesso a APIs nativas e o processo de build. O seu melhor amigo no desenvolvimento.",
+					buttonText: "Visitar Site",
+					url: "https://docs.expo.dev/",
+				},
+			],
+		},
+	],
+};
+
 export const ptCurriculum = {
 	objetivoGeneral,
 	modules,
+	evaluations,
+	bibliography,
 };

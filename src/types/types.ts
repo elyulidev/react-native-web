@@ -18,6 +18,22 @@ export interface FileItem {
 	description: string[];
 }
 
+export interface EvaluationCardData {
+	lang: Language;
+	title: string;
+	description: string;
+	buttonText: string;
+	url: string;
+}
+
+export interface BibliographyCardData {
+	type: "pdf" | "link";
+	title: string;
+	description: string;
+	buttonText: string;
+	url: string;
+}
+
 export interface ContentPart {
 	type:
 		| "heading"
@@ -34,7 +50,9 @@ export interface ContentPart {
 		| "quiz"
 		| "fileStructure"
 		| "componentGrid"
-		| "assignment";
+		| "assignment"
+		| "evaluationCards"
+		| "bibliographyCards";
 	text?: string;
 	id?: string; // For anchor links to subtitles
 	code?: string;
@@ -63,6 +81,8 @@ export interface ContentPart {
 	// Assignment properties
 	assignmentId?: string;
 	description?: string[];
+	evaluationCards?: EvaluationCardData[];
+	bibliographyCards?: BibliographyCardData[];
 }
 
 export interface CurriculumTopic {
