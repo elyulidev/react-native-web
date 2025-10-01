@@ -1,6 +1,6 @@
 // src/contexts/LanguageContext.tsx (o como lo hayas llamado)
 
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect, useCallback, useMemo } from "react";
 import { translations } from "../lib/i18n";
 import type { Language, CurriculumTopic } from "../types/types";
 import { LanguageContext } from "./language-context";
@@ -36,7 +36,6 @@ export const LanguageProvider: React.FC<{ children: React.ReactNode }> = ({
 
 	useEffect(() => {
 		localStorage.setItem("language", language);
-		setSelectedTopic(translations[language].curriculum.objetivoGeneral);
 	}, [language]);
 
 	const setLanguage = (lang: Language) => {
@@ -47,25 +46,32 @@ export const LanguageProvider: React.FC<{ children: React.ReactNode }> = ({
 		setSelectedTopic(topic);
 	}, []);
 
-	const t = (key: string, options?: { [key: string]: string }): string => {
-		let text =
-			translations[language].ui[key as keyof typeof translations.es.ui] || key;
-		if (options) {
-			Object.keys(options).forEach((optionKey) => {
-				text = text.replace(`{${optionKey}}`, options[optionKey]);
-			});
-		}
-		return text;
-	};
+	const t = useCallback(
+		(key: string, options?: { [key: string]: string }): string => {
+			let text =
+				translations[language].ui[key as keyof typeof translations.es.ui] ||
+				key;
+			if (options) {
+				Object.keys(options).forEach((optionKey) => {
+					text = text.replace(`{${optionKey}}`, options[optionKey]);
+				});
+			}
+			return text;
+		},
+		[language]
+	);
 
-	const value = {
-		language,
-		setLanguage,
-		t,
-		curriculum: translations[language].curriculum,
-		selectedTopic,
-		handleTopicSelect,
-	};
+	const value = useMemo(
+		() => ({
+			language,
+			setLanguage,
+			t,
+			curriculum: translations[language].curriculum,
+			selectedTopic,
+			handleTopicSelect,
+		}),
+		[language, selectedTopic, handleTopicSelect, t]
+	);
 
 	return (
 		<LanguageContext.Provider value={value}>

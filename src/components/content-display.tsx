@@ -874,20 +874,14 @@ const findTopic = (
 		// Correctly extract the module's unique ID.
 		const moduleId = id.slice(0, id.length - 9);
 		console.log("moduleId", moduleId);
-		return (
-			curriculum.modules.find((mod) => mod.id === moduleId)?.overview ||
-			curriculum.objetivoGeneral
-		);
+		return curriculum.modules.find((mod) => mod.id === moduleId)?.overview;
 	}
 
 	if (id.startsWith("conf-")) {
 		// Flatten all conferences into a single array and then search.
 		// This correctly returns the conference topic itself, not its parent module.
 		const allConferences = curriculum.modules.flatMap((mod) => mod.conferences);
-		return (
-			allConferences.find((topic) => topic.id === id) ||
-			curriculum.objetivoGeneral
-		);
+		return allConferences.find((topic) => topic.id === id);
 	}
 
 	// For static IDs, use a lookup map. It's cleaner and more scalable than a switch.
@@ -898,28 +892,39 @@ const findTopic = (
 	};
 
 	// Return the value from the map. If the ID is not a key, this returns undefined.
-	return staticTopicsMap[id];
+	return staticTopicsMap[id] || staticTopicsMap["objetivo-general"];
 };
 
 export const ContentDisplay: React.FC<ContentDisplayProps> = ({
-	topic,
 	onLoginRequest,
 }) => {
+	// 1. Obtener el parámetro de la URL
 	const { id } = useParams<{ id: string }>();
-	const { language } = useLanguage();
-	const currentTopic = useMemo(() => {
-		return id
-			? (findTopic(id!, translations, language) as CurriculumTopic | null)
-			: topic;
-	}, [id, language, topic]);
+
+	// 2. Acceder al contexto y obtener la función para actualizar el tema
+	const { language, selectedTopic, handleTopicSelect } = useLanguage();
+
+	useEffect(() => {
+		if (!id) return;
+
+		const currentTopic = findTopic(
+			id,
+			translations,
+			language
+		) as CurriculumTopic;
+
+		if (currentTopic) {
+			handleTopicSelect(currentTopic);
+		}
+	}, [id, language, handleTopicSelect]);
 
 	return (
 		<article className='max-w-4xl mx-auto'>
-			{currentTopic?.content.map((part, index) => (
+			{selectedTopic?.content.map((part, index) => (
 				<ContentPartRenderer
 					key={index}
 					part={part}
-					topic={currentTopic as CurriculumTopic}
+					topic={selectedTopic as CurriculumTopic}
 					partIndex={index}
 					onLoginRequest={onLoginRequest}
 				/>
