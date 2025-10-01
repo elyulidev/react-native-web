@@ -125,26 +125,35 @@ export const Sidebar: React.FC<SidebarProps> = ({
 						</button>
 						{expandedModule === module.id && (
 							<div className='pl-4 mt-1 space-y-1'>
-								<button
-									className={`${baseButtonClass} ${
-										isTopicSelected(module.overview)
-											? selectedClass
-											: unselectedClass
-									}`}
+								<NavLink
+									to={`/${module.overview.id}`}
 									onClick={() => onTopicSelect(module.overview)}
 								>
-									{t("moduleOverview")}
-								</button>
-								{module.conferences.map((conf) => (
 									<button
-										key={conf.id}
 										className={`${baseButtonClass} ${
-											isTopicSelected(conf) ? selectedClass : unselectedClass
+											isTopicSelected(module.overview)
+												? selectedClass
+												: unselectedClass
 										}`}
+										onClick={() => onTopicSelect(module.overview)}
+									>
+										{t("moduleOverview")}
+									</button>
+								</NavLink>
+								{module.conferences.map((conf) => (
+									<NavLink
+										key={conf.id}
+										to={`/${conf.id}`}
 										onClick={() => onTopicSelect(conf)}
 									>
-										{conf.title}
-									</button>
+										<button
+											className={`${baseButtonClass} ${
+												isTopicSelected(conf) ? selectedClass : unselectedClass
+											}`}
+										>
+											{conf.title}
+										</button>
+									</NavLink>
 								))}
 							</div>
 						)}
@@ -152,29 +161,39 @@ export const Sidebar: React.FC<SidebarProps> = ({
 				))}
 
 				<div className='pt-4 mt-4 border-t border-slate-200 dark:border-slate-700 space-y-2'>
-					<button
-						className={`w-full flex items-center gap-3 px-3 py-2 rounded-md text-sm font-medium transition-colors duration-150 ${
-							isTopicSelected(curriculum.evaluations)
-								? selectedClass
-								: unselectedClass
-						}`}
+					<NavLink
+						to={`/${curriculum.evaluations.id}`}
 						onClick={() => onTopicSelect(curriculum.evaluations)}
 					>
-						<DocumentChartBarIcon className='w-5 h-5' />
-						<span>{t("evaluationsTitle")}</span>
-					</button>
+						<button
+							className={`w-full flex items-center gap-3 px-3 py-2 rounded-md text-sm font-medium transition-colors duration-150 ${
+								isTopicSelected(curriculum.evaluations)
+									? selectedClass
+									: unselectedClass
+							}`}
+							onClick={() => onTopicSelect(curriculum.evaluations)}
+						>
+							<DocumentChartBarIcon className='w-5 h-5' />
+							<span>{t("evaluationsTitle")}</span>
+						</button>
+					</NavLink>
 
-					<button
-						className={`w-full flex items-center gap-3 px-3 py-2 rounded-md text-sm font-medium transition-colors duration-150 ${
-							isTopicSelected(curriculum.bibliography)
-								? selectedClass
-								: unselectedClass
-						}`}
+					<NavLink
+						to={`/${curriculum.bibliography.id}`}
 						onClick={() => onTopicSelect(curriculum.bibliography)}
 					>
-						<BookOpenIcon className='w-5 h-5' />
-						<span>{t("bibliographyTitle")}</span>
-					</button>
+						<button
+							className={`w-full flex items-center gap-3 px-3 py-2 rounded-md text-sm font-medium transition-colors duration-150 ${
+								isTopicSelected(curriculum.bibliography)
+									? selectedClass
+									: unselectedClass
+							}`}
+							onClick={() => onTopicSelect(curriculum.bibliography)}
+						>
+							<BookOpenIcon className='w-5 h-5' />
+							<span>{t("bibliographyTitle")}</span>
+						</button>
+					</NavLink>
 				</div>
 			</nav>
 		</aside>

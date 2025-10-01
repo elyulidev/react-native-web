@@ -221,3 +221,5 @@ export const translations = {
 		curriculum: ptCurriculum,
 	},
 };
+
+export type Translations = typeof translations;

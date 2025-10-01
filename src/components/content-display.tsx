@@ -51,6 +51,8 @@ import {
 import { useLanguage } from "../hooks/use-language";
 import { useAuth } from "../hooks/use-auth";
 import { Spinner } from "./spinner";
+import { useParams } from "react-router-dom";
+import { translations, type Translations } from "@/lib/i18n";
 
 // Map icon names from data to actual components
 const icons: IconMap = {
@@ -859,17 +861,65 @@ interface ContentDisplayProps {
 	onLoginRequest: () => void;
 }
 
+const findTopic = (
+	id: string,
+	translations: Translations,
+	language: keyof typeof translations
+) => {
+	// Get a direct reference to the curriculum to avoid repetition.
+	const curriculum = translations[language].curriculum;
+
+	// Handle dynamic IDs based on their prefix first.
+	if (id.startsWith("modulo-")) {
+		// Correctly extract the module's unique ID.
+		const moduleId = id.slice(0, id.length - 9);
+		console.log("moduleId", moduleId);
+		return (
+			curriculum.modules.find((mod) => mod.id === moduleId)?.overview ||
+			curriculum.objetivoGeneral
+		);
+	}
+
+	if (id.startsWith("conf-")) {
+		// Flatten all conferences into a single array and then search.
+		// This correctly returns the conference topic itself, not its parent module.
+		const allConferences = curriculum.modules.flatMap((mod) => mod.conferences);
+		return (
+			allConferences.find((topic) => topic.id === id) ||
+			curriculum.objetivoGeneral
+		);
+	}
+
+	// For static IDs, use a lookup map. It's cleaner and more scalable than a switch.
+	const staticTopicsMap: Record<string, unknown> = {
+		"objetivo-general": curriculum.objetivoGeneral,
+		evaluations: curriculum.evaluations,
+		bibliography: curriculum.bibliography,
+	};
+
+	// Return the value from the map. If the ID is not a key, this returns undefined.
+	return staticTopicsMap[id];
+};
+
 export const ContentDisplay: React.FC<ContentDisplayProps> = ({
 	topic,
 	onLoginRequest,
 }) => {
+	const { id } = useParams<{ id: string }>();
+	const { language } = useLanguage();
+	const currentTopic = useMemo(() => {
+		return id
+			? (findTopic(id!, translations, language) as CurriculumTopic | null)
+			: topic;
+	}, [id, language, topic]);
+
 	return (
 		<article className='max-w-4xl mx-auto'>
-			{topic.content.map((part, index) => (
+			{currentTopic?.content.map((part, index) => (
 				<ContentPartRenderer
 					key={index}
 					part={part}
-					topic={topic}
+					topic={currentTopic as CurriculumTopic}
 					partIndex={index}
 					onLoginRequest={onLoginRequest}
 				/>
