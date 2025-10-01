@@ -62,15 +62,14 @@ const objetivoGeneral: CurriculumTopic = {
 	id: "objetivo-general",
 	title: "Objetivo General",
 	content: [
-		{ type: "heading", text: "Objetivo General del Bootcamp" },
+		{ type: "heading", text: "Objetivo General de la Asignatura" },
 		{
 			type: "paragraph",
 			text: "Capacitarte para construir aplicaciones móviles multiplataforma (Android, iOS y Web) utilizando React Native y Expo, con un enfoque en el desarrollo local y la persistencia de datos con SQLite y Drizzle ORM.",
 		},
 		{
 			type: "image",
-			imageUrl:
-				"https://images.unsplash.com/photo-1607799279861-4d5ae1387c09?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+			imageUrl: "/objetivo-general.webp",
 			caption: "Un ecosistema de desarrollo moderno para aplicaciones móviles.",
 		},
 	],
