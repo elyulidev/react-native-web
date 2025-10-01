@@ -873,7 +873,7 @@ const findTopic = (
 	if (id.startsWith("modulo-")) {
 		// Correctly extract the module's unique ID.
 		const moduleId = id.slice(0, id.length - 9);
-		console.log("moduleId", moduleId);
+
 		return curriculum.modules.find((mod) => mod.id === moduleId)?.overview;
 	}
 
