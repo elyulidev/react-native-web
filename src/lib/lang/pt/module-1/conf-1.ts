@@ -48,7 +48,9 @@ export const conference1: CurriculumTopic = {
 		{
 			type: "image",
 			imageUrl:
-				"https://storage.googleapis.com/aistudio-hosting/bootcamp-assets/react-native-vs-web.png",
+				process.env.NODE_ENV === "production"
+					? "https://kvskvfok8cknjmpl.public.blob.vercel-storage.com/react-native-vs-react-web.webp"
+					: "/conf1/react-native-vs-react-web.webp",
 			caption:
 				"Visualização conceitual das diferenças de componentes entre React Web e React Native.",
 		},
@@ -86,7 +88,9 @@ export const conference1: CurriculumTopic = {
 		{
 			type: "image",
 			imageUrl:
-				"https://storage.googleapis.com/aistudio-hosting/bootcamp-assets/expo-ecosystem.png",
+				process.env.NODE_ENV === "production"
+					? "https://kvskvfok8cknjmpl.public.blob.vercel-storage.com/expo-ecosystem.webp"
+					: "/conf1/expo-ecosystem.webp",
 			caption:
 				"O ecossistema Expo: um conjunto de ferramentas sobre React Native para agilizar o desenvolvimento.",
 		},
@@ -210,22 +214,13 @@ export default () => <Text>About Screen</Text>;
 		{
 			type: "image",
 			imageUrl:
-				"https://storage.googleapis.com/aistudio-hosting/bootcamp-assets/stack-vs-tabs.png",
+				process.env.NODE_ENV === "production"
+					? "https://kvskvfok8cknjmpl.public.blob.vercel-storage.com/stack-vs-tabs.webp"
+					: "/conf1/stack-vs-tabs.webp",
 			caption:
 				"Padrões de navegação: Stack Navigator organiza as telas em uma pilha, enquanto Tabs Navigator oferece uma barra de abas para a navegação principal.",
 		},
 
 		{ type: "divider" },
-
-		{ type: "subtitle", text: "Parte 6: Próximos Passos" },
-		{
-			type: "list",
-			items: [
-				{ text: "Autenticação e Gerenciamento de Usuários", subItems: [] },
-				{ text: "Gerenciamento de Dados e Backend", subItems: [] },
-				{ text: "Estilização Avançada e Otimização", subItems: [] },
-				{ text: "Implantação na App Store e Google Play", subItems: [] },
-			],
-		},
 	],
 };

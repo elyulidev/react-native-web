@@ -69,7 +69,10 @@ const objetivoGeneral: CurriculumTopic = {
 		},
 		{
 			type: "image",
-			imageUrl: "/objetivo-general.webp",
+			imageUrl:
+				process.env.NODE_ENV === "production"
+					? "https://kvskvfok8cknjmpl.public.blob.vercel-storage.com/objetivo-general.webp"
+					: "/objetivo-general.webp",
 			caption: "Un ecosistema de desarrollo moderno para aplicaciones móviles.",
 		},
 	],
