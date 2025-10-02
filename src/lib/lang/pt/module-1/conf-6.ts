@@ -28,12 +28,12 @@ export const conference6: CurriculumTopic = {
 		{
 			type: "code",
 			language: "bash",
-			code: `npm install nativewind react-native-reanimated@~3.17.4 react-native-safe-area-context@5.4.0\nnpm install --dev tailwindcss@^3.4.17 prettier-plugin-tailwindcss@^0.5.11`,
+			code: `npm install nativewind react-native-reanimated react-native-safe-area-context\nnpm install --dev tailwindcss prettier-plugin-tailwindcss\npnpm add nativewind react-native-reanimated react-native-safe-area-context\npnpm add -D tailwindcss prettier-plugin-tailwindcss`,
 		},
 		{
 			type: "list",
 			items: [
-				"**2. Configurar o Tailwind CSS:** Execute `npx tailwindcss init` para criar o seu ficheiro `tailwind.config.js`. Em seguida, configure-o para analisar os seus ficheiros e adicione o preset do NativeWind.",
+				"**2. Configurar o Tailwind CSS:** Execute `npx tailwindcss init` o `pnpm tailwindcss init` para criar o seu ficheiro `tailwind.config.js`. Em seguida, configure-o para analisar os seus ficheiros e adicione o preset do NativeWind.",
 			],
 		},
 		{
