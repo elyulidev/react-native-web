@@ -48,12 +48,22 @@ export const conference18: CurriculumTopic = {
 
 		{ type: "subtitle", text: "Passo 2: Instalar o pacote `expo-sqlite`" },
 		{ type: "code", language: "bash", code: "npx expo install expo-sqlite" },
+		{
+			type: "callout",
+			alertType: "warning",
+			text: "O suporte da Web é experimental e pode ser instável.",
+		},
 
 		{ type: "subtitle", text: "Passo 3: Instalar pacotes necessários" },
 		{
 			type: "code",
 			language: "bash",
-			code: "npm i drizzle-orm\nnpm i -D drizzle-kit\npnpm add drizzle-orm\npnpm add -D drizzle-kit",
+			code: "npm i drizzle-orm\nnpm i -D drizzle-kit",
+		},
+		{
+			type: "callout",
+			alertType: "warning",
+			text: "Pode ser que você também precise instalar o babel-plugin-inline-import. Se encontrar erros relacionados à importação de arquivos .sql, instale-o com: npm install -D babel-plugin-inline-import",
 		},
 
 		{
