@@ -147,17 +147,32 @@ module.exports = function(api) {
 };`,
 		},
 
-		{ type: "subtitle", text: "Paso 9: Aplicando cambios a la base de datos" },
+		{ type: "subtitle", text: "Paso 9: Configurar Scripts de NPM" },
 		{
 			type: "paragraph",
-			text: "Con Expo, necesitarás generar migraciones usando el comando `drizzle-kit generate` y luego aplicarlas en tiempo de ejecución usando la función `useMigrations` de `drizzle-orm`.",
+			text: "Para simplificar la ejecución de los comandos de Drizzle Kit, es una práctica común añadirlos como scripts en tu `package.json`. Esto te permite ejecutar comandos más cortos y asegura que todo el equipo use los mismos comandos.",
+		},
+		{
+			type: "code",
+			language: "json",
+			code: `"scripts": {\n    // ... outros scripts\n    "generate": "drizzle-kit generate",\n    "migrate": "drizzle-kit migrate",\n    "studio": "drizzle-kit studio"\n},`,
+		},
+		{
+			type: "paragraph",
+			text: "Ahora puedes ejecutar `npm run generate` para crear migraciones y `npm run studio` para abrir el visor de base de datos de Drizzle.",
+		},
+
+		{ type: "subtitle", text: "Paso 10: Aplicando cambios a la base de datos" },
+		{
+			type: "paragraph",
+			text: "Con Expo, necesitarás generar migraciones usando el comando `drizzle-kit generate` (o `npm run generate`) y luego aplicarlas en tiempo de ejecución usando la función `useMigrations` de `drizzle-orm`.",
 		},
 		{ type: "paragraph", text: "Generar migraciones:" },
-		{ type: "code", language: "bash", code: "npx drizzle-kit generate" },
+		{ type: "code", language: "bash", code: "npm run generate" },
 
 		{
 			type: "subtitle",
-			text: "Paso 10: Aplicar migraciones y consultar tu BD",
+			text: "Paso 11: Aplicar migraciones y consultar tu BD",
 		},
 		{
 			type: "paragraph",
@@ -241,26 +256,11 @@ export default function App() {
 
 		{
 			type: "subtitle",
-			text: "Paso 11: Precompilar y ejecutar la app de Expo",
+			text: "Paso 12: Precompilar y ejecutar la app de Expo",
 		},
-		{ type: "code", language: "bash", code: "npm run start" },
+		{ type: "code", language: "bash", code: "npx run start" },
 
 		{ type: "divider" },
-
-		{ type: "subtitle", text: "Paso 12: Configurar Scripts de NPM" },
-		{
-			type: "paragraph",
-			text: "Para simplificar la ejecución de los comandos de Drizzle Kit, es una práctica común añadirlos como scripts en tu `package.json`. Esto te permite ejecutar comandos más cortos y asegura que todo el equipo use los mismos comandos.",
-		},
-		{
-			type: "code",
-			language: "json",
-			code: `"scripts": {\n    // ... otros scripts\n    "generate": "drizzle-kit generate",\n    "migrate": "drizzle-kit migrate",\n    "studio": "drizzle-kit studio"\n},`,
-		},
-		{
-			type: "paragraph",
-			text: "Ahora puedes ejecutar `npm run generate` para crear migraciones y `npm run studio` para abrir el visor de base de datos de Drizzle.",
-		},
 
 		{
 			type: "subtitle",
