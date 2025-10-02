@@ -267,17 +267,32 @@ export default function App() {
 
 		{
 			type: "subtitle",
-			text: "Passo 13: Entendendo Drizzle ORM vs. Drizzle Kit",
+			text: "Passo 13: Considerações de Desenvolvimento vs. Produção",
 		},
 		{
 			type: "paragraph",
-			text: "É importante distinguir entre os dois pacotes principais que instalamos:",
+			text: "É importante entender como gerenciamos o banco de dados nos diferentes ambientes:",
 		},
 		{
 			type: "list",
 			items: [
-				"**`drizzle-orm`**: É o ORM em si, a biblioteca que você usa no código da sua aplicação em tempo de execução. Fornece as funções como `db.select()`, `db.insert()`, etc., para interagir com o banco de dados. É uma dependência de produção.",
-				"**`drizzle-kit`**: É um conjunto de ferramentas de linha de comando para o desenvolvimento. Não é incluído na sua aplicação final. As suas principais funções são comparar o seu esquema com o banco de dados para `gerar` migrações SQL e fornecer o Drizzle `Studio` para uma inspeção visual dos seus dados. É uma dependência de desenvolvimento (`-D`).",
+				{
+					text: "**Desenvolvimento**",
+					subItems: [
+						"`drizzle-kit` é uma dependência de desenvolvimento (`-D`), não é incluído na aplicação final.",
+						"Usamos `npm run generate` para criar migrações cada vez que mudamos o esquema.",
+						"As migrações são aplicadas em tempo de execução ao iniciar a app.",
+						"O Drizzle Studio (`npm run studio`) é a nossa ferramenta para depurar e visualizar os dados.",
+					],
+				},
+				{
+					text: "**Produção**",
+					subItems: [
+						"`drizzle-orm` é uma dependência de produção, é essencial para que a app funcione.",
+						"As migrações devem ser aplicadas automaticamente quando o utilizador abre a aplicação pela primeira vez ou a atualiza.",
+						"Não se deve armazenar informação altamente sensível no banco de dados local sem encriptação.",
+					],
+				},
 			],
 		},
 	],
