@@ -57,13 +57,21 @@ pnpm add -D <package-name>    # Instala dependência de desenvolvimento com pnpm
 		{
 			type: "code",
 			language: "bash",
-			code: "npx create-expo-app@latest meu-super-app",
+			code: `
+npx create-expo-app@latest mi-super-app
+pnpm create expo-app mi-super-app`,
 		},
 		{
 			type: "paragraph",
-			text: "Se quiser instalá-lo no diretório atual, basta adicionar um ponto no final:",
+			text: "Si quieres instalarlo en el directorio actual, simplemente añade un punto al final:",
 		},
-		{ type: "code", language: "bash", code: "npx create-expo-app@latest ." },
+		{
+			type: "code",
+			language: "bash",
+			code: `
+npx create-expo-app@latest .
+pnpm create expo-app .`,
+		},
 
 		{ type: "subtitle", text: "Funcionalidades do Template Padrão" },
 		{

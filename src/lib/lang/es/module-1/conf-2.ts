@@ -54,13 +54,21 @@ pnpm add -D <package-name>    # Instala dependencia de desarrollo con pnpm`,
 		{
 			type: "code",
 			language: "bash",
-			code: "npx create-expo-app@latest mi-super-app",
+			code: `
+npx create-expo-app@latest mi-super-app
+pnpm create expo-app mi-super-app`,
 		},
 		{
 			type: "paragraph",
 			text: "Si quieres instalarlo en el directorio actual, simplemente añade un punto al final:",
 		},
-		{ type: "code", language: "bash", code: "npx create-expo-app@latest ." },
+		{
+			type: "code",
+			language: "bash",
+			code: `
+npx create-expo-app@latest .
+pnpm create expo-app .`,
+		},
 
 		{ type: "subtitle", text: "Características de la Plantilla por Defecto" },
 		{
