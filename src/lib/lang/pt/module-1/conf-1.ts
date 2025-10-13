@@ -136,7 +136,9 @@ export const conference1: CurriculumTopic = {
 		{
 			type: "image",
 			imageUrl:
-				"https://storage.googleapis.com/aistudio-hosting/bootcamp-assets/expo-go-workflow.png",
+				process.env.NODE_ENV === "production"
+					? "https://kvskvfok8cknjmpl.public.blob.vercel-storage.com/expo-go-scan.webp"
+					: "/conf1/expo-go-scan.webp",
 			caption:
 				"Fluxo de desenvolvimento com o Expo Go: codifique, escaneie o QR e visualize seu aplicativo instantaneamente no seu dispositivo.",
 		},
@@ -176,7 +178,10 @@ export const conference1: CurriculumTopic = {
 		{
 			type: "image",
 			imageUrl:
-				"https://storage.googleapis.com/aistudio-hosting/bootcamp-assets/safe-area-view.png",
+				process.env.NODE_ENV === "production"
+					? "https://kvskvfok8cknjmpl.public.blob.vercel-storage.com/comparative_SafeAreaView.webp"
+					: "/conf1/comparative_SafeAreaView.webp",
+
 			caption:
 				"Comparação visual: Sem `SafeAreaView` (esquerda) o conteúdo é obstruído pelos elementos do sistema, enquanto com `SafeAreaView` (direita) se ajusta perfeitamente à área visível.",
 		},

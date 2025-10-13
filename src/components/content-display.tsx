@@ -707,11 +707,11 @@ const ContentPartRenderer: React.FC<{
 			return <Alert part={part} />;
 		case "image":
 			return (
-				<figure className='my-6'>
+				<figure className='my-6 '>
 					<img
 						src={part.imageUrl}
 						alt={part.caption || "Imagen de la conferencia"}
-						className='rounded-lg shadow-lg w-full object-contain'
+						className='max-h-94 rounded-lg shadow-lg w-full object-contain'
 					/>
 					{part.caption && (
 						<figcaption className='text-center text-sm text-slate-500 dark:text-slate-400 mt-2'>

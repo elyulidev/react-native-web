@@ -132,7 +132,9 @@ const styles = StyleSheet.create({
 		{
 			type: "image",
 			imageUrl:
-				"https://storage.googleapis.com/aistudio-hosting/bootcamp-assets/flex-direction-rn.png",
+				process.env.NODE_ENV === "production"
+					? "https://kvskvfok8cknjmpl.public.blob.vercel-storage.com/conf5/flex-direction.webp"
+					: "/conf5/flex-direction.webp",
 			caption:
 				'`flexDirection`: "column" (esquerda, padrão) empilha os elementos verticalmente. "row" (direita) alinha-os horizontalmente.',
 		},
@@ -143,7 +145,9 @@ const styles = StyleSheet.create({
 		{
 			type: "image",
 			imageUrl:
-				"https://storage.googleapis.com/aistudio-hosting/bootcamp-assets/justify-content-rn.png",
+				process.env.NODE_ENV === "production"
+					? "https://kvskvfok8cknjmpl.public.blob.vercel-storage.com/conf5/jc-all.webp"
+					: "/conf5/jc-all.webp",
 			caption:
 				'Opções de `justifyContent` com `flexDirection: "column"`. Controla o espaçamento vertical.',
 		},
@@ -154,7 +158,9 @@ const styles = StyleSheet.create({
 		{
 			type: "image",
 			imageUrl:
-				"https://storage.googleapis.com/aistudio-hosting/bootcamp-assets/align-items-rn.png",
+				process.env.NODE_ENV === "production"
+					? "https://kvskvfok8cknjmpl.public.blob.vercel-storage.com/conf5/ai-all.png"
+					: "/conf5/ai-all.webp",
 			caption:
 				'Opções de `alignItems` com `flexDirection: "column"`. Controla o alinhamento horizontal.',
 		},
@@ -223,7 +229,9 @@ const styles = StyleSheet.create({
 		{
 			type: "image",
 			imageUrl:
-				"https://storage.googleapis.com/aistudio-hosting/bootcamp-assets/light-dark-theme.png",
+				process.env.NODE_ENV === "production"
+					? "https://kvskvfok8cknjmpl.public.blob.vercel-storage.com/conf5/dark-light-mode.webp"
+					: "/conf5/dark-light-mode.webp",
 			caption:
 				"Uma interface de utilizador que se adapta ao modo claro e escuro para uma melhor experiência de utilizador.",
 		},
