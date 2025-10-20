@@ -28,7 +28,7 @@ export const conference6: CurriculumTopic = {
 		{
 			type: "code",
 			language: "bash",
-			code: `npm install nativewind react-native-reanimated react-native-safe-area-context\nnpm install --dev tailwindcss@^3.4.17 prettier-plugin-tailwindcss@^0.5.11\npnpm add nativewind react-native-reanimated react-native-safe-area-context\npnpm add -D @^3.4.17 prettier-plugin-tailwindcss@^0.5.11`,
+			code: `npm install nativewind react-native-reanimated react-native-safe-area-context\nnpm install -D tailwindcss@^3.4.17 prettier-plugin-tailwindcss@^0.5.11\npnpm add nativewind react-native-reanimated react-native-safe-area-context\npnpm add -D @^3.4.17 prettier-plugin-tailwindcss@^0.5.11`,
 		},
 		{
 			type: "list",
