@@ -12,7 +12,9 @@ export const conference8: CurriculumTopic = {
 		{
 			type: "image",
 			imageUrl:
-				"https://storage.googleapis.com/aistudio-hosting/bootcamp-assets/movie-card-project-goal.png",
+				process.env.NODE_ENV === "production"
+					? "https://kvskvfok8cknjmpl.public.blob.vercel-storage.com/conf-8/movie-card.webp"
+					: "/conf8/movie-card.webp",
 			caption: "O componente `MovieCard` que iremos construir.",
 		},
 		{ type: "divider" },
