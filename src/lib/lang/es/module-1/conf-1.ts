@@ -28,12 +28,12 @@ export const conference1: CurriculumTopic = {
 				{
 					icon: "UsersIcon",
 					title: "Gran Adopción",
-					text: "Utilizado por gigantes como Meta, Microsoft, Tesla, y Airbnb.",
+					text: "Utilizado por gigantes como Meta, Microsoft, Shopify y Discord.",
 				},
 				{
 					icon: "BoltIcon",
 					title: "Alto Rendimiento",
-					text: "La nueva arquitectura (JSI, Turbo Modules, Fabric) ofrece un rendimiento cercano al nativo.",
+					text: "La arquitectura estándar (JSI, Turbo Modules, Fabric) ofrece un rendimiento cercano al nativo.",
 				},
 			],
 		},
@@ -41,7 +41,7 @@ export const conference1: CurriculumTopic = {
 		{
 			type: "callout",
 			alertType: "info",
-			text: "Aproximadamente el 75% del conocimiento de React para desarrollo web se traslada directamente al móvil.",
+			text: "La mayor parte del conocimiento de React para desarrollo web se traslada directamente al móvil.",
 		},
 
 		{ type: "subtitle", text: "React Native vs. React Web" },
@@ -72,7 +72,7 @@ export const conference1: CurriculumTopic = {
 						"className → style={StyleSheet.create(...)}",
 						"CSS → NativeWind (Tailwind)",
 						"onClick → onPress",
-						"onMouseOver → onLongPress",
+						"onHoverIn → onPressIn (para web)",
 					],
 				},
 			],
@@ -127,12 +127,12 @@ export const conference1: CurriculumTopic = {
 			type: "paragraph",
 			text: "Comenzar un nuevo proyecto es tan simple como ejecutar un solo comando en tu terminal.",
 		},
-		{ type: "code", language: "bash", code: "npx create-expo-app my-app" },
+		{ type: "code", language: "bash", code: "bun create expo-app my-app" },
 		{
 			type: "paragraph",
 			text: "Luego, inícialo y escanea el QR con la app Expo Go en tu teléfono.",
 		},
-		{ type: "code", language: "bash", code: "cd my-app\nnpx expo start" },
+		{ type: "code", language: "bash", code: "cd my-app\nbun expo start" },
 		{
 			type: "image",
 			imageUrl:
@@ -162,12 +162,12 @@ export const conference1: CurriculumTopic = {
 				{
 					icon: "RectangleGroupIcon",
 					title: "SafeAreaView",
-					text: "Esencial para asegurar que tu UI no se superponga con la barra de estado o las muescas del dispositivo.",
+					text: "Esencial para asegurar que tu UI no se superponga con la barra de estado o las muescas del dispositivo. Usa react-native-safe-area-context en lugar del SafeAreaView del core.",
 				},
 				{
 					icon: "CodeBracketIcon",
 					title: "StyleSheet.create",
-					text: "La forma recomendada de organizar y reutilizar estilos para un rendimiento óptimo.",
+					text: "Forma recomendada de organizar estilos con tipado seguro. Este curso usa NativeWind (Tailwind CSS) para estilos modernos.",
 				},
 				{
 					icon: "ArrowRightIcon",

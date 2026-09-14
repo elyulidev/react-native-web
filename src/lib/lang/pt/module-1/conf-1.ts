@@ -23,17 +23,17 @@ export const conference1: CurriculumTopic = {
 				{
 					icon: "CodeBracketIcon",
 					title: "Código Único",
-					text: "Escreva o código uma vez e implemente-o em iOS и Android, economizando tempo e recursos.",
+					text: "Escreva o código uma vez e implemente-o em iOS e Android, economizando tempo e recursos.",
 				},
 				{
 					icon: "UsersIcon",
 					title: "Grande Adoção",
-					text: "Utilizado por gigantes como Meta, Microsoft, Tesla e Airbnb.",
+					text: "Utilizado por gigantes como Meta, Microsoft, Shopify e Discord.",
 				},
 				{
 					icon: "BoltIcon",
 					title: "Alto Desempenho",
-					text: "A nova arquitetura (JSI, Turbo Modules, Fabric) oferece um desempenho próximo ao nativo.",
+					text: "A arquitetura padrão (JSI, Turbo Modules, Fabric) oferece um desempenho próximo ao nativo.",
 				},
 			],
 		},
@@ -41,7 +41,7 @@ export const conference1: CurriculumTopic = {
 		{
 			type: "callout",
 			alertType: "info",
-			text: "Aproximadamente 75% do conhecimento de React para desenvolvimento web é transferido diretamente para o móvel.",
+			text: "A maioria do conhecimento de React para desenvolvimento web é transferido diretamente para o móvel.",
 		},
 
 		{ type: "subtitle", text: "React Native vs. React Web" },
@@ -72,7 +72,7 @@ export const conference1: CurriculumTopic = {
 						"className → style={StyleSheet.create(...)}",
 						"CSS → NativeWind (Tailwind)",
 						"onClick → onPress",
-						"onMouseOver → onLongPress",
+						"onHoverIn → onPressIn (para web)",
 					],
 				},
 			],
@@ -110,7 +110,7 @@ export const conference1: CurriculumTopic = {
 				{
 					icon: "DevicePhoneMobileIcon",
 					title: "Expo Go",
-					text: "Um aplicativo para testar seus desenvolvimentos в tempo real no seu dispositivo físico.",
+					text: "Um aplicativo para testar seus desenvolvimentos em tempo real no seu dispositivo físico.",
 				},
 				{
 					icon: "FolderIcon",
@@ -127,12 +127,12 @@ export const conference1: CurriculumTopic = {
 			type: "paragraph",
 			text: "Começar um novo projeto é tão simples quanto executar um único comando no seu terminal.",
 		},
-		{ type: "code", language: "bash", code: "npx create-expo-app my-app" },
+		{ type: "code", language: "bash", code: "bun create expo-app my-app" },
 		{
 			type: "paragraph",
 			text: "Em seguida, inicie-o e escaneie o QR com o aplicativo Expo Go no seu telefone.",
 		},
-		{ type: "code", language: "bash", code: "cd my-app\nnpx expo start" },
+		{ type: "code", language: "bash", code: "cd my-app\nbun expo start" },
 		{
 			type: "image",
 			imageUrl:
@@ -161,12 +161,12 @@ export const conference1: CurriculumTopic = {
 				{
 					icon: "RectangleGroupIcon",
 					title: "SafeAreaView",
-					text: "Essencial para garantir que sua UI não se sobreponha à barra de status ou aos entalhes do dispositivo.",
+					text: "Essencial para garantir que sua UI não se sobreponha à barra de status ou aos entalhes do dispositivo. Use react-native-safe-area-context em vez do SafeAreaView do core.",
 				},
 				{
 					icon: "CodeBracketIcon",
 					title: "StyleSheet.create",
-					text: "A maneira recomendada de organizar e reutilizar estilos para um desempenho ideal.",
+					text: "Maneira recomendada de organizar estilos com tipagem segura. Este curso usa NativeWind (Tailwind CSS) para estilos modernos.",
 				},
 				{
 					icon: "ArrowRightIcon",

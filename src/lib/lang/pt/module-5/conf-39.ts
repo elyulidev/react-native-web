@@ -134,7 +134,7 @@ export default ErrorBoundary;
 		{ type: "paragraph", text: "**Passo 2: Envolver a sua Aplicação**" },
 		{
 			type: "paragraph",
-			text: "Agora, pode usar o seu `ErrorBoundary` для envolver partes da sua aplicação. Um bom sítio para começar é no seu layout raiz (`app/_layout.tsx`) para capturar quaisquer erros de navegação ou dos ecrãs principais.",
+			text: "Agora, pode usar o seu `ErrorBoundary` para envolver partes da sua aplicação. Um bom sítio para começar é no seu layout raiz (`app/_layout.tsx`) para capturar quaisquer erros de navegação ou dos ecrãs principais.",
 		},
 		{
 			type: "code",

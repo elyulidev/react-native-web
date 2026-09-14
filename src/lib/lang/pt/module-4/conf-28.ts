@@ -124,7 +124,7 @@ export default RecipeFetcher;
 				{
 					icon: "RectangleStackIcon",
 					title: "Estados Vazios (Empty States)",
-					text: 'Se uma pesquisa não devolver resultados, не deixe o ecrã em branco. Mostre uma mensagem como "Não foram encontradas receitas para a sua pesquisa" e, se possível, uma sugestão para tentar novamente.',
+					text: 'Se uma pesquisa não devolver resultados, não deixe o ecrã em branco. Mostre uma mensagem como "Não foram encontradas receitas para a sua pesquisa" e, se possível, uma sugestão para tentar novamente.',
 				},
 				{
 					icon: "PowerIcon",

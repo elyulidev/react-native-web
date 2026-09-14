@@ -75,7 +75,7 @@ export const conference48: CurriculumTopic = {
 				{
 					icon: "BoltIcon",
 					title: "Desempenho Nativo",
-					text: "Aprenda a usar os perfis de desempenho (Performance Profilers) для identificar e resolver estrangulamentos nas suas aplicações. Em casos extremos, aprenda os conceitos básicos de como escrever os seus próprios Módulos Nativos.",
+					text: "Aprenda a usar os perfis de desempenho (Performance Profilers) para identificar e resolver estrangulamentos nas suas aplicações. Em casos extremos, aprenda os conceitos básicos de como escrever os seus próprios Módulos Nativos.",
 				},
 				{
 					icon: "UsersIcon",

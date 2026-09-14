@@ -318,7 +318,7 @@ const styles = StyleSheet.create({
 		{ type: "subtitle", id: "flat-list", text: "FlatList" },
 		{
 			type: "paragraph",
-			text: "Um componente de alto desempenho para renderizar listas. `FlatList` é ideal para listas longas e dinâmicas, pois apenas renderiza os itens que estão atualmente no ecrã, poupando memória и tempo de processamento.",
+			text: "Um componente de alto desempenho para renderizar listas. `FlatList` é ideal para listas longas e dinâmicas, pois apenas renderiza os itens que estão atualmente no ecrã, poupando memória e tempo de processamento.",
 		},
 		{
 			type: "code",

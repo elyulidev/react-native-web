@@ -103,7 +103,7 @@ export async function seedDatabase() {
 		{ type: "subtitle", text: "3. Executando o Script de Seeding" },
 		{
 			type: "paragraph",
-			text: "Quando и como executamos esta função `seedDatabase`? Existem várias estratégias, mas uma comum no desenvolvimento móvel é executá-la condicionalmente no início da aplicação, por exemplo, apenas no modo de desenvolvimento ou quando o banco de dados está vazio.",
+			text: "Quando e como executamos esta função `seedDatabase`? Existem várias estratégias, mas uma comum no desenvolvimento móvel é executá-la condicionalmente no início da aplicação, por exemplo, apenas no modo de desenvolvimento ou quando o banco de dados está vazio.",
 		},
 		{
 			type: "paragraph",

@@ -128,7 +128,7 @@ async function createPost(title, body) {
 		},
 		{
 			type: "paragraph",
-			text: "A solução é usar **variáveis de ambiente**. Criamos um ficheiro `.env` na raiz do nosso projeto (que **nunca** deve ser carregado para o Git) и armazenamos as nossas chaves lá.",
+			text: "A solução é usar **variáveis de ambiente**. Criamos um ficheiro `.env` na raiz do nosso projeto (que **nunca** deve ser carregado para o Git) e armazenamos as nossas chaves lá.",
 		},
 		{
 			type: "code",

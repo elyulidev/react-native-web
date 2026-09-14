@@ -79,7 +79,7 @@ const styles = StyleSheet.create({
 		{ type: "subtitle", id: "alert", text: "Alert" },
 		{
 			type: "paragraph",
-			text: "Lança uma caixa de diálogo de alerta nativa com um título, uma mensagem e botões. A API `Alert` é multiplataforma и permite-lhe criar alertas simples ou com múltiplos botões para ações como confirmar ou cancelar.",
+			text: "Lança uma caixa de diálogo de alerta nativa com um título, uma mensagem e botões. A API `Alert` é multiplataforma e permite-lhe criar alertas simples ou com múltiplos botões para ações como confirmar ou cancelar.",
 		},
 		{
 			type: "code",
