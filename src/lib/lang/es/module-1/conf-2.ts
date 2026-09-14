@@ -241,5 +241,28 @@ bun add -D <package-name>    # Instala una dependencia de desarrollo con bun`,
 				},
 			],
 		},
+
+		{ type: "divider" },
+		{ type: "heading", text: "Tarea Extraclase: Crea tu Primera App" },
+		{
+			type: "paragraph",
+			text: "Pon en práctica lo aprendido creando un proyecto Expo desde cero con Bun. Esta tarea es individual y deberás entregar un informe simple con capturas y las respuestas a las preguntas finales.",
+		},
+		{
+			type: "list",
+			items: [
+				"1. **Crea un proyecto** llamado `mi-primera-app` con `bun create expo-app mi-primera-app`.",
+				"2. **Explora la estructura generada**: identifica las carpetas `app`, `assets`, `components`, `constants` y los archivos `app.json`, `package.json` y `tsconfig.json`. Anota para qué sirve cada uno.",
+				"3. **Ejecuta la app** con `bun expo start` y ábrela en Expo Go desde tu dispositivo (ambos en la misma red Wi-Fi).",
+				"4. **Modifica `app/index.tsx`**: cambia el texto de bienvenida por uno personalizado y observa cómo se actualiza al instante con Fast Refresh.",
+				"5. **Crea una segunda pantalla** `app/detalles.tsx` con un texto propio y verifica que la ruta `/detalles` funciona reemplazando la URL en el navegador web (o navegando desde la app si ya usas enlaces).",
+				"6. **Responde en tu informe**: ¿Qué hace el comando `bun run reset-project`? ¿Por qué es importante que tu dispositivo y tu ordenador estén en la misma red Wi-Fi?",
+			],
+		},
+		{
+			type: "callout",
+			alertType: "tip",
+			text: "Consejo: si algo no funciona, revisa los pasos de la sección 'Ejecución de tu Primera App en Expo Go' — el error más común es no tener permiso de red local en iOS o estar en redes Wi-Fi diferentes.",
+		},
 	],
 };
