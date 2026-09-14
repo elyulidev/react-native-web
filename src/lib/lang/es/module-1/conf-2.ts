@@ -196,6 +196,7 @@ bun add -D <package-name>    # Instala una dependencia de desarrollo con bun`,
 			text: "Con el servidor de desarrollo corriendo (`bun expo start`), presiona `a` en la terminal para abrir el emulador de Android o `i` para el simulador de iOS.",
 		},
 
+		/*
 		{ type: "divider" },
 		{ type: "heading", text: "¡Pon a prueba tus conocimientos!" },
 		{
@@ -241,6 +242,7 @@ bun add -D <package-name>    # Instala una dependencia de desarrollo con bun`,
 				},
 			],
 		},
+		*/
 
 		{ type: "divider" },
 		{ type: "heading", text: "Tarea Extraclase: Crea tu Primera App" },
