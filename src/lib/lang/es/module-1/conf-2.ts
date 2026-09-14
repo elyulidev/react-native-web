@@ -18,16 +18,13 @@ export const conference2: CurriculumTopic = {
 		{ type: "code", language: "bash", code: "node --version" },
 		{
 			type: "paragraph",
-			text: "Junto con Node.js, se instala npm (Node Package Manager). npm y pnpm son gestores de paquetes utilizados para instalar dependencias en tu proyecto.",
+			text: "Junto con Node.js, se instala npm (Node Package Manager), pero en este curso usaremos **Bun** como gestor de paquetes principal: es más rápido y está optimizado para el ecosistema de Expo.",
 		},
 		{
 			type: "code",
 			language: "bash",
-			code: `npm install <package-name>  # Instala un paquete con npm
-pnpm add <package-name>      # Instala un paquete con pnpm
-
-npm install -D <package-name> # Instala dependencia de desarrollo con npm
-pnpm add -D <package-name>    # Instala dependencia de desarrollo con pnpm`,
+			code: `bun add <package-name>       # Instala un paquete con bun
+bun add -D <package-name>    # Instala una dependencia de desarrollo con bun`,
 		},
 
 		{ type: "subtitle", text: "Configuración de tu Editor de Código: VS Code" },
@@ -54,9 +51,7 @@ pnpm add -D <package-name>    # Instala dependencia de desarrollo con pnpm`,
 		{
 			type: "code",
 			language: "bash",
-			code: `
-npx create-expo-app@latest mi-super-app
-pnpm create expo-app mi-super-app`,
+			code: `bun create expo-app mi-super-app`,
 		},
 		{
 			type: "paragraph",
@@ -65,9 +60,7 @@ pnpm create expo-app mi-super-app`,
 		{
 			type: "code",
 			language: "bash",
-			code: `
-npx create-expo-app@latest .
-pnpm create expo-app .`,
+			code: `bun create expo-app .`,
 		},
 
 		{ type: "subtitle", text: "Características de la Plantilla por Defecto" },
@@ -94,7 +87,7 @@ pnpm create expo-app .`,
 			type: "paragraph",
 			text: "Si prefieres empezar con una estructura mínima en lugar de la plantilla de ejemplo, puedes eliminar el código predeterminado ejecutando un script incluido:",
 		},
-		{ type: "code", language: "bash", code: "npm run reset-project" },
+		{ type: "code", language: "bash", code: "bun run reset-project" },
 		{
 			type: "paragraph",
 			text: "Este comando moverá el contenido de la carpeta `app` a una nueva carpeta `app-example` (para que puedas consultarla) y creará una nueva carpeta `app` con solo un archivo `index.tsx` básico.",
@@ -148,7 +141,7 @@ pnpm create expo-app .`,
 					id: "package.json",
 					name: "package.json",
 					description: [
-						"Contiene las dependencias del proyecto, los scripts (como `npm start`) y los metadatos. Cada vez que se añade una nueva dependencia, se registra aquí.",
+						"Contiene las dependencias del proyecto, los scripts (como `bun start`) y los metadatos. Cada vez que se añade una nueva dependencia, se registra aquí.",
 					],
 				},
 				{
@@ -170,7 +163,7 @@ pnpm create expo-app .`,
 			type: "paragraph",
 			text: "Para iniciar el servidor de desarrollo, ejecuta:",
 		},
-		{ type: "code", language: "bash", code: "npx expo start" },
+		{ type: "code", language: "bash", code: "bun expo start" },
 		{
 			type: "paragraph",
 			text: "Aparecerá un código QR en tu terminal. Escanéalo con la cámara (iOS) o desde la app Expo Go (Android). ¡Tu ordenador y tu dispositivo móvil deben estar en la misma red Wi-Fi!",
@@ -178,11 +171,11 @@ pnpm create expo-app .`,
 		{
 			type: "callout",
 			alertType: "warning",
-			text: "Solución de problemas comunes: Asegúrate de dar permiso de red local en iOS. Si sigue fallando, prueba a usar un túnel con `npx expo start --tunnel`.",
+			text: "Solución de problemas comunes: Asegúrate de dar permiso de red local en iOS. Si sigue fallando, prueba a usar un túnel con `bun expo start --tunnel`.",
 		},
 		{
 			type: "paragraph",
-			text: "Cualquier cambio que hagas en el código (por ejemplo, en `app/index.tsx`) se reflejará instantáneamente en tu dispositivo gracias al 'hot reloading'.",
+			text: "Cualquier cambio que hagas en el código (por ejemplo, en `app/index.tsx`) se reflejará instantáneamente en tu dispositivo gracias al 'Fast Refresh'.",
 		},
 
 		{ type: "subtitle", text: "Configuración Opcional de Simuladores" },
@@ -200,7 +193,7 @@ pnpm create expo-app .`,
 		},
 		{
 			type: "paragraph",
-			text: "Con el servidor de desarrollo corriendo (`npx expo start`), presiona `a` en la terminal para abrir el emulador de Android o `i` para el simulador de iOS.",
+			text: "Con el servidor de desarrollo corriendo (`bun expo start`), presiona `a` en la terminal para abrir el emulador de Android o `i` para el simulador de iOS.",
 		},
 
 		{ type: "divider" },
@@ -212,10 +205,10 @@ pnpm create expo-app .`,
 					question:
 						"¿Cuál es el comando para crear un nuevo proyecto con Expo en el directorio actual?",
 					options: [
-						"npx create-expo-app .",
+						"bun create expo-app .",
 						"expo new project .",
 						"npx expo init .",
-						"npm create expo-app .",
+						"bunx create-expo-app .",
 					],
 					correctAnswer: 0,
 				},
@@ -242,7 +235,7 @@ pnpm create expo-app .`,
 				},
 				{
 					question:
-						"En la terminal donde se ejecuta `npx expo start`, ¿qué tecla presionas para abrir el simulador de iOS?",
+						"En la terminal donde se ejecuta `bun expo start`, ¿qué tecla presionas para abrir el simulador de iOS?",
 					options: ["s", "a", "i", "e"],
 					correctAnswer: 2,
 				},
