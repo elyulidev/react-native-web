@@ -54,7 +54,7 @@ bun add -D <package-name>    # Instala uma dependência de desenvolvimento com b
 		{
 			type: "code",
 			language: "bash",
-			code: `bun create expo-app mi-super-app`,
+			code: `bun create expo mi-super-app`,
 		},
 		{
 			type: "paragraph",
@@ -63,7 +63,7 @@ bun add -D <package-name>    # Instala uma dependência de desenvolvimento com b
 		{
 			type: "code",
 			language: "bash",
-			code: `bun create expo-app .`,
+			code: `bun create expo .`,
 		},
 
 		{ type: "subtitle", text: "Funcionalidades do Template Padrão" },

@@ -51,7 +51,7 @@ bun add -D <package-name>    # Instala una dependencia de desarrollo con bun`,
 		{
 			type: "code",
 			language: "bash",
-			code: `bun create expo-app mi-super-app`,
+			code: `bun create expo mi-super-app`,
 		},
 		{
 			type: "paragraph",
@@ -60,7 +60,7 @@ bun add -D <package-name>    # Instala una dependencia de desarrollo con bun`,
 		{
 			type: "code",
 			language: "bash",
-			code: `bun create expo-app .`,
+			code: `bun create expo .`,
 		},
 
 		{ type: "subtitle", text: "Características de la Plantilla por Defecto" },
