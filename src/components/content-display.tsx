@@ -618,13 +618,47 @@ const Alert: React.FC<{ part: ContentPart }> = ({ part }) => {
 
 	return (
 		<div
-			className={`flex items-start p-4 my-6 rounded-lg border-l-4 ${styles.bg} ${styles.border}`}
+			className={`flex items-start gap-3 p-5 my-6 rounded-xl border shadow-sm ${styles.bg} ${styles.border} border-l-4`}
 			role='alert'
 		>
-			<div className='flex-shrink-0 mr-3'>{styles.icon}</div>
-			<p className={`text-sm ${styles.text}`}>{part.text}</p>
+			<div className='flex-shrink-0 mt-0.5'>{styles.icon}</div>
+			<p className={`text-[0.95rem] leading-7 ${styles.text}`}>{part.text}</p>
 		</div>
 	);
+};
+
+// Inline rich text for lists: **bold** + `code`
+const renderRichInline = (text: string) => {
+	const boldParts = text.split("**");
+	return boldParts.map((boldSeg, bi) => {
+		if (bi % 2 === 1) {
+			return (
+				<strong
+					key={bi}
+					className='font-semibold text-slate-900 dark:text-slate-50'
+				>
+					{boldSeg}
+				</strong>
+			);
+		}
+		const codeParts = boldSeg.split("`");
+		return (
+			<React.Fragment key={bi}>
+				{codeParts.map((codeSeg, ci) =>
+					ci % 2 === 1 ? (
+						<code
+							key={ci}
+							className='rounded-md bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 px-1.5 py-0.5 font-mono text-[0.85em] text-primary-700 dark:text-primary-300 break-words'
+						>
+							{codeSeg}
+						</code>
+					) : (
+						<React.Fragment key={ci}>{codeSeg}</React.Fragment>
+					)
+				)}
+			</React.Fragment>
+		);
+	});
 };
 
 const ContentPartRenderer: React.FC<{
@@ -633,13 +667,40 @@ const ContentPartRenderer: React.FC<{
 	partIndex: number;
 	onLoginRequest: () => void;
 }> = ({ part, topic, partIndex, onLoginRequest }) => {
+	const { language } = useLanguage();
 	switch (part.type) {
-		case "heading":
+		case "heading": {
+			if (
+				part.text?.startsWith("Tarea Extraclase") ||
+				part.text?.startsWith("Tarefa Extraclasse")
+			) {
+				return (
+					<div className='my-10 overflow-hidden rounded-2xl border border-primary-200 dark:border-primary-900/60 shadow-sm'>
+						<div className='bg-gradient-to-r from-primary-600 to-primary-500 px-6 py-5'>
+							<p className='text-xs font-semibold uppercase tracking-widest text-primary-100'>
+								{language === "pt"
+									? "Encerramento · trabalho individual"
+									: "Cierre · trabajo individual"}
+							</p>
+							<h2 className='mt-1 text-2xl md:text-3xl font-extrabold tracking-tight text-white text-balance'>
+								{part.text}
+							</h2>
+						</div>
+					</div>
+				);
+			}
 			return (
-				<h1 className='text-3xl font-extrabold mt-4 mb-4 text-slate-900 dark:text-white'>
-					{part.text}
-				</h1>
+				<>
+					<h1 className='text-4xl md:text-5xl font-extrabold tracking-tight mt-2 mb-3 text-slate-900 dark:text-white text-balance'>
+						{part.text}
+					</h1>
+					<div
+						className='mb-8 h-1.5 w-24 rounded-full bg-gradient-to-r from-primary-500 to-primary-300'
+						aria-hidden
+					/>
+				</>
 			);
+		}
 		case "subtitle": {
 			const slug =
 				part.id ||
@@ -652,9 +713,15 @@ const ContentPartRenderer: React.FC<{
 			return (
 				<h2
 					id={slug}
-					className='text-2xl font-bold mt-12 mb-4 text-slate-800 dark:text-slate-100 border-b pb-2 border-slate-200 dark:border-slate-700 scroll-mt-20'
+					className='flex items-center gap-3 mt-14 mb-5 text-2xl md:text-[1.75rem] font-bold tracking-tight text-slate-900 dark:text-slate-50 scroll-mt-24'
 				>
-					{part.text}
+					<span
+						className='h-8 w-1.5 shrink-0 rounded-full bg-gradient-to-b from-primary-500 to-primary-300'
+						aria-hidden
+					/>
+					<span className='border-b border-slate-200 dark:border-slate-700/80 pb-2 flex-1'>
+						{part.text}
+					</span>
 				</h2>
 			);
 		}
@@ -668,53 +735,107 @@ const ContentPartRenderer: React.FC<{
 			return (
 				<CodeBlock code={part.code || ""} language={part.language || "bash"} />
 			);
-		case "list":
+		case "list": {
+			const items = part.items ?? [];
+			const steppedCount = items.filter((item) => {
+				const t = typeof item === "string" ? item : item.text;
+				return /^\s*\d+\.\s*/.test(t);
+			}).length;
+			const isStepped = items.length >= 2 && steppedCount >= 2;
 			return (
-				<ul className='list-disc list-inside mb-4 pl-4 space-y-2 text-slate-700 dark:text-slate-300'>
-					{part.items?.map((item, index) => {
-						const itemText = typeof item === "string" ? item : item.text;
+				<ul
+					className={
+						isStepped
+							? "my-6 space-y-3"
+							: "my-6 overflow-hidden rounded-2xl border border-slate-200 dark:border-slate-700/80 bg-white dark:bg-slate-900/40 divide-y divide-slate-200 dark:divide-slate-700/60"
+					}
+				>
+					{items.map((item, index) => {
+						const rawText = typeof item === "string" ? item : item.text;
 						const subItems =
 							typeof item !== "string" && item.subItems ? item.subItems : [];
-						const segments = itemText.split("**");
+						const stepMatch = rawText.match(/^\s*(\d+)\.\s*([\s\S]*)$/);
+						const cleanText = stepMatch ? stepMatch[2] : rawText;
+						const stepNumber = stepMatch ? stepMatch[1] : String(index + 1);
+						if (isStepped) {
+							return (
+								<li
+									key={index}
+									className='flex gap-4 rounded-2xl border border-slate-200 dark:border-slate-700/80 bg-white dark:bg-slate-900/40 p-4 sm:p-5 shadow-sm'
+								>
+									<span className='flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-primary-500 text-sm font-bold text-white'>
+										{stepNumber}
+									</span>
+									<div className='min-w-0 flex-1 text-[0.95rem] leading-7 text-slate-700 dark:text-slate-300'>
+										{renderRichInline(cleanText)}
+										{subItems.length > 0 && (
+											<ul className='mt-3 space-y-2 border-t border-slate-100 dark:border-slate-800 pt-3'>
+												{subItems.map((subItem, subIndex) => (
+													<li
+														key={subIndex}
+														className='flex gap-2 text-sm leading-6 text-slate-600 dark:text-slate-400'
+													>
+														<span
+															className='mt-[0.6rem] h-1 w-1 shrink-0 rounded-full bg-slate-400'
+															aria-hidden
+														/>
+														<span>{renderRichInline(subItem)}</span>
+													</li>
+												))}
+											</ul>
+										)}
+									</div>
+								</li>
+							);
+						}
 						return (
-							<li key={index}>
-								{segments.map((segment, i) =>
-									i % 2 === 1 ? (
-										<strong
-											key={i}
-											className='font-semibold text-slate-800 dark:text-slate-100'
-										>
-											{segment}
-										</strong>
-									) : (
-										<React.Fragment key={i}>{segment}</React.Fragment>
-									)
-								)}
-								{subItems.length > 0 && (
-									<ul className='list-disc list-inside mt-2 ml-6 space-y-1'>
-										{subItems.map((subItem, subIndex) => (
-											<li key={subIndex}>{subItem}</li>
-										))}
-									</ul>
-								)}
+							<li
+								key={index}
+								className='flex gap-3 px-4 sm:px-5 py-3.5 text-[0.95rem] leading-7 text-slate-700 dark:text-slate-300'
+							>
+								<span
+									className='mt-[0.7rem] h-1.5 w-1.5 shrink-0 rounded-full bg-primary-500'
+									aria-hidden
+								/>
+								<div className='min-w-0 flex-1'>
+									{renderRichInline(rawText)}
+									{subItems.length > 0 && (
+										<ul className='mt-2 ml-1 space-y-1.5'>
+											{subItems.map((subItem, subIndex) => (
+												<li
+													key={subIndex}
+													className='flex gap-2 text-sm leading-6 text-slate-600 dark:text-slate-400'
+												>
+													<span
+														className='mt-[0.6rem] h-1 w-1 shrink-0 rounded-full bg-slate-400'
+														aria-hidden
+													/>
+													<span>{renderRichInline(subItem)}</span>
+												</li>
+											))}
+										</ul>
+									)}
+								</div>
 							</li>
 						);
 					})}
 				</ul>
 			);
+		}
 		case "alert":
 		case "callout":
 			return <Alert part={part} />;
 		case "image":
 			return (
-				<figure className='my-6 '>
+				<figure className='my-8 overflow-hidden rounded-2xl border border-slate-200 dark:border-slate-700/80 bg-slate-100 dark:bg-slate-800/40 shadow-sm'>
 					<img
 						src={part.imageUrl}
 						alt={part.caption || "Imagen de la conferencia"}
-						className='max-h-94 rounded-lg shadow-lg w-full object-contain'
+						className='w-full max-h-[480px] object-cover'
+						loading='lazy'
 					/>
 					{part.caption && (
-						<figcaption className='text-center text-sm text-slate-500 dark:text-slate-400 mt-2'>
+						<figcaption className='px-4 py-3 text-center text-[13px] leading-5 text-slate-500 dark:text-slate-400 bg-white dark:bg-slate-900/40'>
 							{part.caption}
 						</figcaption>
 					)}
@@ -722,44 +843,52 @@ const ContentPartRenderer: React.FC<{
 			);
 		case "twoColumn":
 			return (
-				<div className='grid md:grid-cols-2 gap-6 my-6'>
+				<div className='grid md:grid-cols-2 gap-4 my-8'>
 					{part.columns?.map((col, index) => (
 						<div
 							key={index}
-							className='p-4 border border-slate-200 dark:border-slate-700 rounded-lg'
+							className={`rounded-2xl border p-5 shadow-sm ${index === 0 ? "border-slate-200 dark:border-slate-700/80 bg-white dark:bg-slate-900/40" : "border-primary-200 dark:border-primary-900/60 bg-primary-50/60 dark:bg-primary-950/30"}`}
 						>
-							<h3 className='font-semibold text-lg mb-2 text-slate-800 dark:text-slate-100'>
+							<h3 className='text-xs font-semibold uppercase tracking-widest text-slate-500 dark:text-slate-400 mb-3'>
 								{col.title}
 							</h3>
-							<ul className='space-y-1 text-slate-600 dark:text-slate-300'>
+							<ul className='space-y-2'>
 								{col.content.map((item, i) => (
-									<li key={i}>{item}</li>
+									<li
+										key={i}
+										className='rounded-lg bg-slate-50 dark:bg-slate-800/60 border border-slate-100 dark:border-slate-800 px-3 py-2 font-mono text-[13.5px] leading-6 text-slate-700 dark:text-slate-200 break-words'
+									>
+										{item}
+									</li>
 								))}
 							</ul>
 						</div>
 					))}
 				</div>
 			);
-		case "featureCard":
+		case "featureCard": {
+			const count = part.featureItems?.length ?? 0;
 			return (
-				<div className='grid sm:grid-cols-2 lg:grid-cols-2 gap-4 my-6'>
+				<div
+					className={`grid gap-4 my-8 sm:grid-cols-2 ${count === 3 ? "lg:grid-cols-3" : ""}`}
+				>
 					{part.featureItems?.map((item, index) => {
 						const IconComponent = icons[item.icon];
 						return (
 							<div
 								key={index}
-								className='flex items-start p-4 bg-slate-100 dark:bg-slate-800/50 rounded-lg'
+								className='group flex items-start gap-4 rounded-2xl border border-slate-200 dark:border-slate-700/80 bg-white dark:bg-slate-900/40 p-5 shadow-sm transition-all duration-200 hover:shadow-md hover:-translate-y-0.5'
 							>
 								{IconComponent && (
-									<div className='flex-shrink-0 mr-4 mt-1'>
-										<IconComponent className='w-6 h-6 text-primary-500' />
+									<div className='flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-primary-100 dark:bg-primary-900/50 transition-colors group-hover:bg-primary-500 group-hover:text-white'>
+										<IconComponent className='w-6 h-6 text-primary-600 dark:text-primary-300 group-hover:text-white' />
 									</div>
 								)}
-								<div>
+								<div className='min-w-0'>
 									<h4 className='font-bold text-slate-900 dark:text-white'>
 										{item.title}
 									</h4>
-									<p className='text-sm text-slate-600 dark:text-slate-300'>
+									<p className='mt-1 text-sm leading-6 text-slate-600 dark:text-slate-300'>
 										{item.text}
 									</p>
 								</div>
@@ -768,8 +897,11 @@ const ContentPartRenderer: React.FC<{
 					})}
 				</div>
 			);
+		}
 		case "divider":
-			return <hr className='my-8 border-slate-200 dark:border-slate-700' />;
+			return (
+				<hr className='my-12 h-px border-0 bg-gradient-to-r from-transparent via-slate-300 dark:via-slate-700 to-transparent' />
+			);
 		case "fileStructure":
 			return <FileStructure files={part.files || []} />;
 		case "componentGrid":
