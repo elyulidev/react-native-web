@@ -127,7 +127,7 @@ export const conference1: CurriculumTopic = {
 			type: "paragraph",
 			text: "Começar um novo projeto é tão simples quanto executar um único comando no seu terminal.",
 		},
-		{ type: "code", language: "bash", code: "bun create expo-app my-app" },
+		{ type: "code", language: "bash", code: "bun create expo my-app" },
 		{
 			type: "paragraph",
 			text: "Em seguida, inicie-o e escaneie o QR com o aplicativo Expo Go no seu telefone.",
@@ -235,7 +235,7 @@ export default () => <Text>About Screen</Text>;
 		{
 			type: "list",
 			items: [
-				"1. **Crie um projeto** chamado `mi-primera-exploracion` com `bun create expo-app mi-primera-exploracion` e inicie-o com `bun expo start`.",
+				"1. **Crie um projeto** chamado `mi-primera-exploracion` com `bun create expo mi-primera-exploracion` e inicie-o com `bun expo start`.",
 				"2. **Mapeie componentes Web → RN**: abra `app/index.tsx` e identifique quais `View`, `Text` e `Image` substituem `div`, `p` e `img`. Anote pelo menos 4 equivalências.",
 				"3. **Teste a área segura**: envolva o conteúdo com `SafeAreaView` de `react-native-safe-area-context`, tire uma captura com e sem ele e descreva a diferença.",
 				"4. **Explore o Expo Router**: crie `app/about.tsx` com um texto próprio e navegue até `/about` usando `Link`. Anote qual arquivo define cada rota.",

@@ -110,7 +110,7 @@ The `edit` tool requires the actual Unicode character in the oldString, not its 
 ### 6. Bun commands in conference content
 
 This course uses **Bun** as its runtime. Official Expo docs for Bun:
-- `bun create expo-app my-app` (NOT `bunx create-expo-app`)
+- `bun create expo my-app` (NOT `bunx create-expo-app`)
 - `bun expo start` (NOT `bunx expo start`)
 - `bun expo install <pkg>` (NOT `npm install`)
 
@@ -132,7 +132,7 @@ Use these when editing conferences to keep content current:
 | Airbnb + React Native | Abandoned in 2018. Replace with Shopify and Discord in company lists |
 | Tesla + React Native | No confirmed production use. Do not list. |
 | React → RN knowledge transfer | Say "the majority", not "75%" (unsourced figure) |
-| Expo `create-expo-app` with Bun | `bun create expo-app my-app` |
+| Expo `create-expo` with Bun | `bun create expo my-app` |
 | `create-expo-app` with npx | `npx create-expo-app my-app` |
 | TanStack Query | v5: `isPending` (not `status === 'pending'`), `gcTime` (not `cacheTime`), no `onSuccess` callback |
 | Drizzle ORM | v1: `$defaultFn`/`sql` for per-row defaults; enum is TS-only in SQLite |
