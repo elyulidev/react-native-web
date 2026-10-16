@@ -74,8 +74,8 @@ bun add -D <package-name>    # Instala uma dependência de desenvolvimento com b
 		{
 			type: "list",
 			items: [
-				"**Duas telas de exemplo:** Localizadas em `app/(tabs)/index.tsx` e `app/(tabs)/explore.tsx`, com uma navegação de abas configurada em `app/(tabs)/_layout.tsx`.",
-				"**Roteamento baseado em arquivos:** A estrutura da pasta `app` define a navegação da sua aplicação.",
+				"**Duas telas de exemplo:** Localizadas em `src/app/index.tsx` e `src/app/explore.tsx`, com a navegação de abas configurada em `src/app/_layout.tsx` (usa abas nativas no Android e iOS).",
+				"**Roteamento baseado em arquivos:** A estrutura da pasta `src/app` define a navegação da sua aplicação: cada ficheiro é uma rota.",
 				"**Suporte para modo claro e escuro:** O template adapta-se automaticamente ao tema do sistema.",
 				"**TypeScript por padrão:** Para um código mais robusto e de fácil manutenção.",
 			],
@@ -93,7 +93,7 @@ bun add -D <package-name>    # Instala uma dependência de desenvolvimento com b
 		{ type: "code", language: "bash", code: "bun run reset-project" },
 		{
 			type: "paragraph",
-			text: "Este comando moverá o conteúdo da pasta `app` para uma nova pasta `app-example` (para que possa consultá-la) e criará uma nova pasta `app` com apenas um arquivo `index.tsx` básico.",
+			text: "Este comando moverá os diretórios `src` e `scripts` para a pasta `example` (para que possa consultá-los) e criará um novo `src/app` com ficheiros `index.tsx` e `_layout.tsx`.",
 		},
 
 		{ type: "subtitle", text: "Estrutura de Arquivos do Projeto" },
@@ -106,45 +106,63 @@ bun add -D <package-name>    # Instala uma dependência de desenvolvimento com b
 			files: [
 				{
 					id: "app",
-					name: "app",
+					name: "src/app",
 					description: [
-						"Contém a navegação da aplicação, que é baseada em arquivos. A estrutura de arquivos do diretório `app` determina a navegação da aplicação.",
-						"Por exemplo, `app/index.tsx` é a rota principal, e `app/detalhes.tsx` torna-se a rota `/detalhes`.",
+						"Contém a navegação da aplicação, que é baseada em ficheiros: cada ficheiro dentro de `src/app` é uma rota, nada mais deve viver aí.",
+						"Por exemplo, `src/app/index.tsx` é a rota principal e `src/app/explore.tsx` a segunda aba; `src/app/_layout.tsx` configura as abas.",
 					],
 				},
 				{
 					id: "assets",
 					name: "assets",
 					description: [
-						"Contém imagens, fontes e outros arquivos estáticos. Por exemplo, o ícone da aplicação (`icon.png`) e a tela de início (`splash.png`).",
+						"Contém o diretório `expo.icon` para o ícone do iOS e o subdiretório `images` com os ficheiros do ícone adaptativo do Android (`android-icon-foreground.png`, `android-icon-background.png` e `android-icon-monochrome.png`).",
+						"Inclui ainda `splash-icon.png` para a tela de início, `favicon.png` para a web e os ícones da navegação por abas.",
 					],
 				},
 				{
 					id: "components",
-					name: "components",
+					name: "src/components",
 					description: [
-						"Uma pasta para os seus componentes React reutilizáveis que são usados em toda a aplicação, como botões personalizados, cartões ou cabeçalhos.",
+						"Guarda os seus componentes React reutilizáveis, como `themed-text.tsx`, que cria textos que respeitam o esquema de cores da app nos modos claro e escuro.",
+						"Alguns componentes têm variantes por plataforma: `*.native.tsx` para nativo e `*.tsx` por defeito para web (por exemplo `animated-icon` e `app-tabs`).",
 					],
 				},
 				{
 					id: "constants",
-					name: "constants",
+					name: "src/constants",
 					description: [
-						"Um local para armazenar valores constantes usados na aplicação, como paletas de cores, dimensões ou configurações.",
+						"Contém `theme.ts`, que define as constantes de cores, tipos de letra e espaçamentos usadas em toda a app.",
+					],
+				},
+				{
+					id: "hooks",
+					name: "src/hooks",
+					description: [
+						"Contém React Hooks, que permitem partilhar comportamento comum entre componentes.",
+						"Por exemplo, `useTheme()` devolve o objeto do tema atual e `useColorScheme()` deteta o esquema de cores do utilizador; alguns hooks têm variantes por plataforma com a extensão `.web.ts`.",
+					],
+				},
+				{
+					id: "scripts",
+					name: "scripts",
+					description: [
+						"Guarda scripts de utilidades do projeto, como o que executa `reset-project` para voltar à estrutura mínima.",
 					],
 				},
 				{
 					id: "app.json",
 					name: "app.json",
 					description: [
-						"Contém as opções de configuração para o projeto. Estas opções alteram o comportamento do seu projeto durante o desenvolvimento, a construção e a publicação da sua aplicação.",
+						"Contém as opções de configuração do projeto e chama-se app config.",
+						"Estas opções alteram o comportamento do seu projeto ao desenvolver, compilar, submeter e atualizar a sua app.",
 					],
 				},
 				{
 					id: "package.json",
 					name: "package.json",
 					description: [
-						"Contém as dependências do projeto, os scripts (como `bun start`) e os metadados. Sempre que uma nova dependência é adicionada, ela é registada aqui.",
+						"O ficheiro `package.json` contém as dependências, os scripts e os metadados do projeto. Sempre que uma nova dependência é adicionada, ela é registada neste ficheiro.",
 					],
 				},
 				{
@@ -152,6 +170,7 @@ bun add -D <package-name>    # Instala uma dependência de desenvolvimento com b
 					name: "tsconfig.json",
 					description: [
 						"Contém as regras que o TypeScript utilizará para impor a segurança de tipos em todo o projeto, ajudando a prevenir erros.",
+						"O template define ainda o alias `@/*` para `./src/*`, para importar sem rotas relativas longas.",
 					],
 				},
 			],
@@ -178,7 +197,7 @@ bun add -D <package-name>    # Instala uma dependência de desenvolvimento com b
 		},
 		{
 			type: "paragraph",
-			text: "Qualquer alteração que faça no código (por exemplo, em `app/index.tsx`) será refletida instantaneamente no seu dispositivo graças ao 'Fast Refresh'.",
+			text: "Qualquer alteração que faça no código (por exemplo, em `src/app/index.tsx`) será refletida instantaneamente no seu dispositivo graças ao 'Fast Refresh'.",
 		},
 
 		{ type: "subtitle", text: "Configuração Opcional de Simuladores" },
@@ -209,7 +228,7 @@ bun add -D <package-name>    # Instala uma dependência de desenvolvimento com b
 					question:
 						"Qual é o comando para criar um novo projeto com Expo no diretório atual?",
 					options: [
-						"bun create expo-app .",
+						"bun create expo .",
 						"expo new project .",
 						"npx expo init .",
 						"bunx create-expo-app .",
@@ -256,11 +275,11 @@ bun add -D <package-name>    # Instala uma dependência de desenvolvimento com b
 		{
 			type: "list",
 			items: [
-				"1. **Crie um projeto** chamado `minha-primeira-app` com `bun create expo-app minha-primeira-app`.",
-				"2. **Explore a estrutura gerada**: identifique as pastas `app`, `assets`, `components`, `constants` e os ficheiros `app.json`, `package.json` e `tsconfig.json`. Anote para que serve cada um.",
+				"1. **Crie um projeto** chamado `minha-primeira-app` com `bun create expo minha-primeira-app`.",
+				"2. **Explore a estrutura gerada**: identifique as pastas `src/app`, `assets`, `src/components`, `src/constants` e os ficheiros `app.json`, `package.json` e `tsconfig.json`. Anote para que serve cada um.",
 				"3. **Execute a app** com `bun expo start` e abra-a no Expo Go a partir do seu dispositivo (ambos na mesma rede Wi-Fi).",
-				"4. **Modifique `app/index.tsx`**: altere o texto de boas-vindas para um personalizado e observe como é atualizado instantaneamente com o Fast Refresh.",
-				"5. **Crie um segundo ecrã** `app/detalhes.tsx` com um texto próprio e verifique que a rota `/detalhes` funciona substituindo a URL no navegador web (ou navegando a partir da app se já usar ligações).",
+				"4. **Modifique `src/app/index.tsx`**: altere o texto de boas-vindas para um personalizado e observe como é atualizado instantaneamente com o Fast Refresh.",
+				"5. **Crie um segundo ecrã** `src/app/detalhes.tsx` com um texto próprio e verifique que a rota `/detalhes` funciona substituindo a URL no navegador web (ou navegando a partir da app se já usar ligações).",
 				"6. **Responda no seu relatório**: O que faz o comando `bun run reset-project`? Por que é importante que o seu dispositivo e o seu computador estejam na mesma rede Wi-Fi?",
 			],
 		},
