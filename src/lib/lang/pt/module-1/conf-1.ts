@@ -227,5 +227,25 @@ export default () => <Text>About Screen</Text>;
 		},
 
 		{ type: "divider" },
+		{ type: "heading", text: "Tarefa Extraclasse: Explore o Ecossistema RN + Expo" },
+		{
+			type: "paragraph",
+			text: "Coloque em prática o que aprendeu explorando as diferenças entre React Web e React Native em um projeto real. Esta tarefa é individual e você deverá entregar um relatório simples com capturas e as respostas às perguntas finais.",
+		},
+		{
+			type: "list",
+			items: [
+				"1. **Crie um projeto** chamado `mi-primera-exploracion` com `bun create expo-app mi-primera-exploracion` e inicie-o com `bun expo start`.",
+				"2. **Mapeie componentes Web → RN**: abra `app/index.tsx` e identifique quais `View`, `Text` e `Image` substituem `div`, `p` e `img`. Anote pelo menos 4 equivalências.",
+				"3. **Teste a área segura**: envolva o conteúdo com `SafeAreaView` de `react-native-safe-area-context`, tire uma captura com e sem ele e descreva a diferença.",
+				"4. **Explore o Expo Router**: crie `app/about.tsx` com um texto próprio e navegue até `/about` usando `Link`. Anote qual arquivo define cada rota.",
+				"5. **Responda no seu relatório**: Por que a documentação oficial recomenda o Expo para começar? Qual é a diferença entre `onClick` e `onPress`, e entre `onHoverIn` e `onPressIn`?",
+			],
+		},
+		{
+			type: "callout",
+			alertType: "tip",
+			text: "Dica: se o Expo Go não conectar, verifique se seu computador e seu celular estão na mesma rede Wi-Fi e se você tem permissão de rede local no iOS.",
+		},
 	],
 };
