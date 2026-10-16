@@ -661,6 +661,12 @@ const renderRichInline = (text: string) => {
 	});
 };
 
+const Paragraph: React.FC<{ text?: string }> = ({ text }) => (
+	<p className='mb-4 leading-relaxed text-slate-700 dark:text-slate-300'>
+		{renderRichInline(text ?? "")}
+	</p>
+);
+
 const ContentPartRenderer: React.FC<{
 	part: ContentPart;
 	topic: CurriculumTopic;
@@ -726,11 +732,7 @@ const ContentPartRenderer: React.FC<{
 			);
 		}
 		case "paragraph":
-			return (
-				<p className='mb-4 leading-relaxed text-slate-700 dark:text-slate-300'>
-					{part.text}
-				</p>
-			);
+			return <Paragraph text={part.text} />;
 		case "code":
 			return (
 				<CodeBlock code={part.code || ""} language={part.language || "bash"} />
