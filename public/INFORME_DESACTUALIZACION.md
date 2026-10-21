@@ -45,9 +45,40 @@
 - El contenido describe la estructura del template por defecto (`app/(tabs)/index.tsx`, `app/(tabs)/explore.tsx`, `create-expo-app@latest`) que **coincide** con el template actual (SDK 50+). ✓ Vigente.
 - Recomienda `npx expo start --tunnel` como solución a problemas de red local — sigue siendo una opción válida del CLI. ✓ Vigente.
 
-### Conf. 7 — Fuentes y Splash Screen
+### Conf. 7 — Gestión de Assets
 
-- `useFonts` de `expo-font`, `SplashScreen.preventAutoHideAsync()` / `hideAsync()` en `app/_layout.tsx` — patrón vigente según docs de Expo. ✓ Vigente.
+**Estado: corregido el 21 de octubre de 2026.** Archivos ES y PT reescritos: 4 blockers y 12 desactualizaciones. El quiz se eliminó y se sustituyó por una tarea práctica (sección 5) con sus consignas y el esqueleto de código para completar.
+
+**Hallazgo 7.1 — Nombre del paquete de iconos incorrecto (error factual).**
+- **Texto original:** "`expo/vector-icons` es una colección muy completa" (el paquete real es `@expo/vector-icons`; el propio ejemplo del curso lo importaba bien, y el quiz premiaba la forma correcta → el texto contradecía al quiz).
+- **Evidencia:** el paquete publicado es `@expo/vector-icons`. La versión 163 del archivo ES (166 en PT) lo escribía sin la arroba.
+- **Veredicto:** 🔴 Corregido. Además el contenido migró al sucesor `@react-native-vector-icons/ionicons`, porque Expo anunció la deprecación de `@expo/vector-icons` (blog del 9-jun-2026) y dejó de ser dependencia del paquete `expo` en SDK 56: https://docs.expo.dev/guides/icons/
+
+**Hallazgo 7.2 — `splash.image` en `app.json` (propiedad eliminada).**
+- **Texto original:** "Aquí puedes definir la ruta al ícono de tu aplicación (propiedad `icon`) y de la splash screen (propiedad `splash.image`)".
+- **Evidencia:** la propiedad `splash` fue eliminada de `ExpoConfig` en SDK 56 (existe en las ramas sdk-51 → sdk-55, no en sdk-56/sdk-57). El reemplazo es el config plugin `expo-splash-screen`, que ya es el método recomendado desde SDK 54.
+- **Veredicto:** 🔴 Corregido. El `app.json` del curso usa ahora el plugin `expo-splash-screen` y la propiedad `icon`.
+
+**Hallazgo 7.3 — Título duplicado en la Tab Bar (el ejemplo se veía roto).**
+- **Texto original:** el ejemplo de `app/(tabs)/_layout.tsx` definía `options={{ title: 'Home' }}` y además dibujaba su propio `<Text>` dentro de `tabBarIcon`.
+- **Evidencia:** la documentación de Expo Router indica que `tabBarLabel` usa el `title` de la escena cuando no se define, por lo que el alumno veía el texto dos veces. La forma documentada de ocultarlo es `tabBarShowLabel: false`.
+- **Veredicto:** 🔴 Corregido. El ejemplo incluye `tabBarShowLabel: false` y una nota explicando cuándo aplicarlo.
+
+**Hallazgo 7.4 — Rutas y comandos desfasados.**
+- **Texto original:** `app/_layout.tsx`, `app/(tabs)/_layout.tsx` y `npx expo start --clear`.
+- **Evidencia:** desde SDK 55 el template por defecto usa `src/app/` (https://docs.expo.dev/router/reference/src-directory/), y el curso ya usa Bun en todos los comandos.
+- **Veredicto:** 🟠 Corregido. Rutas migradas a `src/app/` y comando a `bun expo start --clear`.
+
+**Desactualizaciones adicionales corregidas en el mismo trabajo:**
+- `images.d.ts` ya no es necesario para `require()`: `require` está tipada como `(ruta: string) => any`, así que compila sin declaraciones. El `declare module '*.png'` solo hace falta para la forma `import x from './logo.png'` (TS2307).
+- `expo-image` se mencionaba pero ningún ejemplo lo usaba. Ahora hay ejemplos reales con `contentFit`, `transition` y `cachePolicy` (las props heredadas de RN —`resizeMode`, `fadeDuration`— están deprecadas en `expo-image`).
+- `expo-asset` faltaba por completo: se documenta que `require()` devuelve un número opaco y se enseña `useAssets` (el hook es en plural) y `Asset.fromModule`.
+- `expo-symbols` faltaba: se agrega como alternativa de sistema (SF Symbols en iOS, Material Symbols en Android/web), indicando que está en beta.
+- Faltaban las variantes `@2x` / `@3x` y la regla de que la ruta en `require()` debe ser **estática**.
+- `SplashScreen.hideAsync()` está "provided for backwards compatibility"; se usa `hide()` y se documenta `setOptions({ duration, fade })`.
+- Faltaba el config plugin de `expo-font` (embebido en build, sin `useFonts` en runtime salvo en web) y la nota de que en SDK 57 hay que usar **fuentes estáticas** (las variable fonts llegan en SDK 58).
+- La propiedad `icon` en `app.json` sigue vigente; se documenta además `ios.icon` (carpeta Icon Composer `./assets/expo.icon`).
+- Se elimina el quiz y se agrega la tarea práctica de la sección 5, con sus consignas y el esqueleto de `src/app/profile.tsx` para completar. La entrega es oral: no lleva caja de envío ni login.
 
 ---
 
