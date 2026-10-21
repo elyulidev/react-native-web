@@ -7,280 +7,452 @@ export const conference7: CurriculumTopic = {
 		{ type: "heading", text: "Gestión de Assets: Imágenes, Fuentes e Íconos" },
 		{
 			type: "paragraph",
-			text: "¡Bienvenidos a una sesión esencial para el desarrollo de interfaces de usuario en React Native! Hoy nos enfocaremos en la gestión de assets, cubriendo cómo trabajar con imágenes, configurar fuentes tipográficas personalizadas e integrar librerías de íconos. Una buena gestión de estos recursos no solo mejora la estética de nuestra aplicación, sino también su rendimiento y mantenibilidad.",
+			text: "¡Bienvenidos a una sesión esencial para el desarrollo de interfaces de usuario en React Native! Hoy nos enfocaremos en la gestión de assets: cómo cargar imágenes locales y remotas, cómo registrar tipografías personalizadas y cómo integrar iconos vectoriales. Una buena gestión de estos recursos no solo mejora la estética de nuestra aplicación, sino también su rendimiento y mantenibilidad.",
 		},
 		{ type: "divider" },
 
 		{
 			type: "subtitle",
-			text: "1. Uso Eficiente de Imágenes Locales Mediante require()",
+			text: "1. Imágenes locales y remotas",
 		},
 		{
 			type: "paragraph",
-			text: "Las imágenes son un componente fundamental en casi cualquier aplicación. En React Native, tenemos varias formas de mostrarlas, pero es crucial entender la diferencia entre imágenes locales y remotas, y cuándo usar cada una.",
+			text: "Las imágenes son un componente fundamental en casi cualquier aplicación. React Native trae el componente `Image`, pero dentro de un proyecto Expo la pieza recomendada es **`expo-image`**: es más rápida, cachea los recursos en disco y memoria, y expone `contentFit` en lugar del antiguo `resizeMode`.",
 		},
 		{
 			type: "list",
 			items: [
-				{
-					text: "**Componentes de Imagen:** React Native proporciona el componente `Image` para mostrar diferentes tipos de imágenes (red, estáticos, locales). Para mayor optimización, se recomienda el componente `Image` de `expo-image`, que ofrece políticas de caché y `contentFit`. Para SVGs, se necesita un paquete de terceros como `react-native-svg`.",
-				},
-				{
-					text: "**ImageBackground:** Permite usar imágenes como fondo, superponiendo otros componentes.",
-				},
+				"**`expo-image`:** el componente de imágenes de Expo. Acepta recursos locales (`require`) y remotos (`uri`), cachea en disco y memoria, y permite transiciones y placeholders.",
+				"**`Image` de React Native:** sigue funcionando y es un fallback razonable si no querés agregar dependencias. Ojo: en `expo-image` las props heredadas de React Native (`resizeMode`, `fadeDuration`) están deprecadas.",
+				"**`ImageBackground`:** permite usar una imagen como fondo, superponiendo otros componentes encima.",
+				"**SVG:** React Native no las soporta de forma nativa. Para eso necesitás un paquete de terceros como `react-native-svg`.",
 			],
 		},
-		{ type: "paragraph", text: "**Imágenes Locales con `require()`:**" },
+
+		{ type: "paragraph", text: "**Imágenes locales con `require()`:**" },
 		{
 			type: "list",
 			items: [
-				"Para cargar imágenes desde el almacenamiento local de tu proyecto, se utiliza la función `require()` dentro de la prop `source` del componente `Image`.",
-				"La ruta a la imagen debe ser relativa al archivo donde se usa `require()`.",
-				"**Importante:** Es crucial especificar las dimensiones (`width` y `height`) para las imágenes, ya que por defecto no se muestran si no se definen.",
+				"Para cargar una imagen desde el almacenamiento local del proyecto se usa `require()` dentro de la prop `source`.",
+				"La ruta se resuelve como un módulo de JavaScript: **relativa al archivo donde escribís el `require()`**.",
+				"**Excepción con alias:** el template actual de Expo configura en el `tsconfig.json` los alias `@/*` → `./src/*` y `@/assets/*` → `./assets/*`. Con `@/assets/...` la ruta apunta **siempre a la carpeta `assets/` de la raíz**, sin importar en qué archivo estés.",
+				"La ruta tiene que ser una **string literal**: una constante que el bundler puede leer al compilar. El alias `@/assets/...` también es una string literal, así que cumple la misma regla.",
+				"**No funciona** si armás la ruta dinámicamente: `require('./' + icono + '.png')`, porque el bundler solo resuelve nombres de archivo que conoce al compilar.",
+				"Es crucial especificar las dimensiones (`width` y `height`): sin ellas la imagen no se muestra.",
+				"Para densities distintas podés entregar variantes `@2x` y `@3x` del mismo archivo (por ejemplo `logo@2x.png` y `logo@3x.png`); el sistema elige la correcta según la pantalla.",
 			],
 		},
 		{
 			type: "code",
 			language: "jsx",
-			code: `import { Image, View, StyleSheet } from 'react-native';\n\nconst Logo = () => (\n  <Image \n    source={require('../assets/images/logo.png')} \n    style={{ width: 100, height: 100 }}\n  />\n);`,
+			code: `import { Image } from 'expo-image';
+
+export const Logo = () => (
+  <Image
+    source={require('@/assets/images/logo.png')}
+    style={{ width: 100, height: 100 }}
+    contentFit="contain"
+    transition={200}
+  />
+);`,
 		},
 
-		{ type: "paragraph", text: "**Imágenes Remotas con URI:**" },
+		{ type: "paragraph", text: "**Imágenes remotas con URI:**" },
 		{
 			type: "list",
 			items: [
-				"Para imágenes alojadas en una URL, se pasa un objeto con una propiedad `uri` a la prop `source`.",
+				"Para imágenes alojadas en una URL se pasa un objeto con una propiedad `uri` en la prop `source`.",
 				"Al igual que con las imágenes locales, es necesario especificar las dimensiones.",
+				"`cachePolicy` decide cuánto se guarda en caché: `'none'`, `'disk'` (por defecto), `'memory'` o `'memory-disk'`.",
 			],
 		},
 		{
 			type: "code",
 			language: "jsx",
-			code: `import { Image, View, StyleSheet } from 'react-native';\n\nconst RemoteImage = () => (\n  <Image \n    source={{ uri: 'https://reactnative.dev/img/tiny_logo.png' }} \n    style={{ width: 50, height: 50 }}\n  />\n);`,
+			code: `import { Image } from 'expo-image';
+
+export const RemoteImage = () => (
+  <Image
+    source={{ uri: 'https://reactnative.dev/img/tiny_logo.png' }}
+    style={{ width: 50, height: 50 }}
+    contentFit="cover"
+    cachePolicy="memory-disk"
+  />
+);`,
 		},
 
+		{ type: "paragraph", text: "**Qué es realmente un `require()`:**" },
 		{
 			type: "paragraph",
-			text: "**Configuración de `images.d.ts` para TypeScript:**",
+			text: "En tiempo de ejecución, `require('./logo.png')` no devuelve la imagen: devuelve un **número opaco** que identifica al recurso dentro del bundle. Para resolvedo a una URL real (y a su ancho y alto) usá `expo-asset`, que ya viene incluido en Expo.",
 		},
 		{
+			type: "code",
+			language: "jsx",
+			code: `import { Asset, useAssets } from 'expo-asset';
+
+// Con el hook: cargás varios recursos y esperás a que estén listos.
+const [assets] = useAssets([require('@/assets/images/logo.png')]);
+// assets[0].uri, assets[0].width, assets[0].height
+
+// O de forma puntual, fuera de un componente:
+const asset = Asset.fromModule(require('@/assets/images/logo.png'));`,
+		},
+
+		{ type: "paragraph", text: "**TypeScript y los módulos de imagen:**" },
+		{
 			type: "paragraph",
-			text: "Si utilizas TypeScript, es común que el IDE se queje de la falta de declaraciones de tipo para los archivos de imagen. Para solucionar esto, crea un archivo `images.d.ts` en la raíz de tu proyecto y declara los módulos:",
+			text: "Si usás TypeScript y escribís la imagen como `import logo from './logo.png'`, el IDE se va a quejar de que no encuentra el módulo. Para eso sí necesitás un archivo de declaraciones. En cambio, cuando usás `require()` no hace falta nada: la función `require` está tipada como `(ruta: string) => any`, así que el compilador no se queja.",
 		},
 		{
 			type: "code",
 			language: "typescript",
-			code: `// images.d.ts\ndeclare module '*.png';\ndeclare module '*.jpg';\ndeclare module '*.jpeg';`,
+			code: `// images.d.ts (solo para la forma import, no para require)
+declare module '*.png';
+declare module '*.jpg';
+declare module '*.jpeg';`,
 		},
 
 		{ type: "paragraph", text: "**Organización de Assets:**" },
 		{
 			type: "paragraph",
-			text: "Es una buena práctica organizar tus imágenes en una carpeta `assets/images`. También puedes centralizar la importación y exportación de imágenes desde un solo archivo (ej. `constants/images.ts`) para facilitar su uso en toda la aplicación.",
+			text: "Es una buena práctica organizar tus imágenes en una carpeta `assets/images` (y las tipografías en `assets/fonts`). También podés centralizar la importación y exportación de imágenes desde un solo archivo (por ejemplo `src/constants/images.ts`) para facilitar su uso en toda la aplicación.",
 		},
-
+		{
+			type: "callout",
+			alertType: "tip",
+			text: "Consejo: si tenés muchos assets, revisá que los nombres y las carpetas no tengan espacios ni acentos. El bundler los maneja, pero algunos scripts de build y algunos CDNs no.",
+		},
 		{ type: "divider" },
 
 		{
 			type: "subtitle",
-			text: "2. Configuración y Aplicación de Fuentes Personalizadas",
+			text: "2. Fuentes personalizadas",
 		},
 		{
 			type: "paragraph",
-			text: "Usar fuentes personalizadas es clave para la identidad visual de una aplicación. Expo facilita enormemente este proceso con el paquete `expo-font`.",
+			text: "Usar fuentes personalizadas es clave para la identidad visual de una aplicación. Expo lo resuelve con el paquete `expo-font`, que ofrece dos caminos: el **config plugin** (recomendado) y el hook `useFonts`.",
 		},
 		{
 			type: "list",
 			items: [
-				"**1. Organizar las Fuentes:** Guarda los archivos de las fuentes (`.ttf`, `.otf`) en una carpeta dedicada, como `assets/fonts/`.",
-				"**2. Cargar las Fuentes con `useFonts`:** El hook `useFonts` de `expo-font` es la forma recomendada para cargar fuentes asincrónicamente. Esto se hace generalmente en el archivo de layout principal (`app/_layout.tsx`).",
-				"**3. Controlar la Splash Screen:** Es importante usar `SplashScreen.preventAutoHideAsync()` al inicio y `SplashScreen.hideAsync()` una vez que las fuentes se han cargado para una experiencia de usuario fluida.",
+				"**1. Organizar las fuentes:** guardá los archivos (`.ttf` u `.otf`) en `assets/fonts/`.",
+				"**2. Opción A — config plugin (recomendada):** declarás las fuentes en el `app.json` y quedan **embebidas en el build**, así que se ven desde el primer frame sin esperar nada en runtime.",
+				"**3. Opción B — hook `useFonts`:** cargás las fuentes de forma asíncrona desde el layout raíz. Es la opción a usar cuando no podés usar el plugin (por ejemplo, en **web**, donde los plugins son nativos).",
 			],
 		},
 		{
 			type: "code",
-			language: "jsx",
-			code: `// app/_layout.tsx
+			language: "json",
+			code: `{
+  "expo": {
+    "plugins": [
+      [
+        "expo-font",
+        {
+          "fonts": [
+            "./assets/fonts/Quicksand-Regular.ttf",
+            "./assets/fonts/Quicksand-Bold.ttf"
+          ]
+        }
+      ]
+    ]
+  }
+}`,
+		},
+		{
+			type: "paragraph",
+			text: "Cada archivo se convierte en una familia con el nombre del archivo sin extensión: `Quicksand-Bold.ttf` queda disponible como `Quicksand-Bold`.",
+		},
+		{
+			type: "code",
+			language: "tsx",
+			code: `// src/app/_layout.tsx
 import { useFonts } from 'expo-font';
 import * as SplashScreen from 'expo-splash-screen';
+import { Stack } from 'expo-router';
 import { useEffect } from 'react';
 
+// Se llama en el scope global: si lo hacés dentro de un componente,
+// puede ejecutarse tarde, cuando la splash ya se ocultó.
 SplashScreen.preventAutoHideAsync();
 
 export default function RootLayout() {
   const [fontsLoaded, error] = useFonts({
-    'Quicksand-Bold': require('../assets/fonts/Quicksand-Bold.ttf'),
-    'Quicksand-Regular': require('../assets/fonts/Quicksand-Regular.ttf'),
+    'Quicksand-Bold': require('@/assets/fonts/Quicksand-Bold.ttf'),
+    'Quicksand-Regular': require('@/assets/fonts/Quicksand-Regular.ttf'),
   });
 
   useEffect(() => {
     if (fontsLoaded || error) {
-      SplashScreen.hideAsync();
+      SplashScreen.hide();
     }
   }, [fontsLoaded, error]);
 
   if (!fontsLoaded && !error) {
     return null;
   }
-  // ... resto del layout
+
+  return <Stack />;
 }`,
 		},
 		{
+			type: "callout",
+			alertType: "warning",
+			text: "En Expo SDK 57 usá **archivos de fuente estáticos**. Las fuentes variables (variable fonts) y las familias con varios pesos bajo un mismo nombre llegan recién en SDK 58.",
+		},
+
+		{ type: "paragraph", text: "**Controlar la Splash Screen:**" },
+		{
 			type: "list",
 			items: [
-				"**4. Extender el Tema de Tailwind CSS:** Para que Tailwind reconozca y permita usar tus fuentes personalizadas a través de clases, debes extender la propiedad `fontFamily` en `tailwind.config.js`.",
+				"`SplashScreen.preventAutoHideAsync()` mantiene la splash visible; llamalo en el scope global, sin `await`.",
+				"`SplashScreen.hide()` la oculta. (`hideAsync()` existe por compatibilidad hacia atrás, pero `hide()` es la API actual.)",
+				"`SplashScreen.setOptions({ duration, fade })` permite definir cuánto dura la transición de salida; `fade` solo aplica en iOS.",
 			],
+		},
+
+		{ type: "paragraph", text: "**Exponer la fuente en Tailwind CSS:**" },
+		{
+			type: "paragraph",
+			text: "Para que Tailwind reconozca y permita usar tus fuentes personalizadas a través de clases, extendé la propiedad `fontFamily` en el `tailwind.config.js`.",
 		},
 		{
 			type: "code",
 			language: "javascript",
 			code: `// tailwind.config.js
+/** @type {import('tailwindcss').Config} */
 module.exports = {
-  // ...
+  content: ["./src/**/*.{js,jsx,ts,tsx}"],
+  presets: [require("nativewind/preset")],
   theme: {
     extend: {
       fontFamily: {
-        'q-bold': ['Quicksand-Bold', 'sans-serif'],
-        'q-reg': ['Quicksand-Regular', 'sans-serif'],
+        'quicksand-bold': ['Quicksand-Bold', 'sans-serif'],
+        'quicksand-regular': ['Quicksand-Regular', 'sans-serif'],
       },
     },
   },
-  // ...
+  plugins: [],
 };`,
 		},
 		{
 			type: "list",
 			items: [
-				'**5. Aplicar las Fuentes:** Una vez configuradas en Tailwind, puedes aplicar las fuentes a tus componentes usando las clases CSS correspondientes, por ejemplo: `<Text className="font-q-bold">Mi Texto</Text>`.',
+				'**Aplicar las fuentes:** una vez configuradas en Tailwind, las usás con las clases correspondientes, por ejemplo: `<Text className="font-quicksand-bold">Mi Texto</Text>`.',
 			],
 		},
-
 		{ type: "divider" },
 
-		{ type: "subtitle", text: "3. Integración de Librerías de Íconos" },
+		{
+			type: "subtitle",
+			text: "3. Librerías de íconos",
+		},
 		{
 			type: "paragraph",
-			text: "Los íconos son elementos esenciales para la navegación y la comunicación visual. `expo/vector-icons` es una colección muy completa que facilita la inclusión de miles de íconos.",
+			text: "Los íconos son elementos esenciales para la navegación y la comunicación visual. Durante años se usó `@expo/vector-icons`, pero **Expo ya anunció su deprecación**: dejó de ser una dependencia del paquete `expo` y su sucesor es la familia de paquetes por conjunto `@react-native-vector-icons/*`.",
 		},
 		{
 			type: "list",
 			items: [
-				"**Expo Vector Icons:** Esta librería es una colección de diferentes conjuntos de íconos, como `Ionicons`, `Feather`, `MaterialIcons`, `AntDesign`, etc. Para usarlos, primero necesitas importar el conjunto específico que desees desde `@expo/vector-icons`.",
+				"**Instalación:** cada conjunto es un paquete propio. `expo install` no lo conoce (Expo no publica una versión oficial para él), así que se instala con Bun directamente.",
+				"**Uso:** importás el conjunto que quieras y usás el prop `name` con el nombre del ícono. Los nombres están tipados, así que el autocompletado te avisa si escribís uno inexistente.",
+				"**Expo Go:** la importación por defecto registra la fuente automáticamente, así que funciona en Expo Go sin development build.",
+				"**Importación `/static`:** si necesitás que la fuente del ícono se embeba en el build (y no se cargue en runtime), importás desde `@react-native-vector-icons/ionicons/static`. Eso **sí requiere development build** y su propio config plugin.",
+				"**Codemod:** si venís migrando desde `@expo/vector-icons`, `bunx @react-native-vector-icons/codemod` te reescribe los imports automáticamente.",
 			],
 		},
 		{
 			type: "code",
-			language: "jsx",
-			code: `import { Ionicons } from '@expo/vector-icons';\n\nconst HomeIcon = () => (\n  <Ionicons name="home-outline" size={24} color="black" />\n);`,
-		},
-		{
-			type: "list",
-			items: [
-				"**Íconos en la Barra de Navegación:** En Expo Router, puedes definir íconos personalizados para cada pestaña en la barra de navegación utilizando la prop `tabBarIcon` dentro de `Tabs.Screen.options`. Esta prop recibe una función de callback que proporciona `color`, `size` y el estado `focused`, permitiendo cambiar el estilo del ícono dinámicamente.",
-				"**Iconos Personalizados desde Assets:** Además de las librerías de íconos, puedes usar tus propios archivos de imagen (PNG, etc.) como íconos, importándolos desde tu carpeta `assets/icons` utilizando `require()`.",
-				"**Ícono de la App y Splash Screen (`app.json`):** El archivo `app.json` es el centro de configuración. Aquí puedes definir la ruta al ícono de tu aplicación (propiedad `icon`) y de la splash screen (propiedad `splash.image`).",
-			],
-		},
-
-		{ type: "divider" },
-
-		{ type: "subtitle", text: "4. Práctica: Mejorar la Barra de Navegación" },
-		{
-			type: "paragraph",
-			text: "Para consolidar lo aprendido, vamos a mejorar la barra de navegación inferior (Tab Bar) de nuestra aplicación, usando íconos de Expo Vector Icons y aplicando una fuente personalizada.",
-		},
-		{
-			type: "list",
-			items: [
-				"**1. Preparación:** Asegúrate de tener una fuente personalizada en `assets/fonts/` y que esté cargada en `app/_layout.tsx` (como se mostró anteriormente).",
-				"**2. Extender Tailwind:** Añade la fuente personalizada a `tailwind.config.js` y reinicia el servidor (`npx expo start --clear`).",
-				"**3. Refactorizar `app/(tabs)/_layout.tsx`:** Abre el layout de tus pestañas. Usa la prop `tabBarIcon` para definir los íconos de cada pestaña y un componente personalizado para el texto y el ícono.",
-			],
+			language: "bash",
+			code: `bun add @react-native-vector-icons/ionicons`,
 		},
 		{
 			type: "code",
 			language: "jsx",
-			code: `// app/(tabs)/_layout.tsx (Ejemplo para la pestaña 'Home')
+			code: `import Ionicons from '@react-native-vector-icons/ionicons';
+
+export const HomeIcon = () => (
+  <Ionicons name="home-outline" size={24} color="#000000" />
+);`,
+		},
+
+		{ type: "paragraph", text: "**`expo-symbols`: los íconos del sistema**" },
+		{
+			type: "paragraph",
+			text: "Si tu app se ve bien en iOS con los íconos nativos, `expo-symbols` te da acceso directo a **SF Symbols** en iOS y a **Material Symbols** en Android y web, sin escribir una sola ruta SVG.",
+		},
+		{
+			type: "code",
+			language: "tsx",
+			code: `import { SymbolView } from 'expo-symbols';
+
+// El nombre puede ser un objeto por plataforma: iOS usa SF Symbols,
+// Android y web usan Material Symbols.
+export const HeartIcon = () => (
+  <SymbolView
+    name={{ ios: 'heart.fill', android: 'favorite', web: 'favorite' }}
+    size={24}
+    tintColor="#FF6363"
+    type="hierarchical"
+  />
+);`,
+		},
+		{
+			type: "callout",
+			alertType: "info",
+			text: "`expo-symbols` está en beta: la API puede cambiar. Es ideal para íconos de sistema, pero para una marca propia conviene un set de iconos propio.",
+		},
+
+		{ type: "paragraph", text: "**Íconos en la Barra de Navegación:**" },
+		{
+			type: "paragraph",
+			text: "En Expo Router definís los íconos de cada pestaña con la prop `tabBarIcon` dentro de `Tabs.Screen.options`. Recibe un callback con `color`, `size` y el estado `focused`, así que podés cambiar el ícono según la pestaña esté activa o no.",
+		},
+		{
+			type: "code",
+			language: "tsx",
+			code: `// src/app/(tabs)/_layout.tsx
 import { Tabs } from 'expo-router';
-import { View, Text, Image } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
+import { Text, View } from 'react-native';
+import Ionicons from '@react-native-vector-icons/ionicons';
 
-const TabIcon = ({ icon, color, name, focused }) => {
+export default function TabLayout() {
   return (
-    <View style={{ alignItems: 'center', justifyContent: 'center', gap: 2 }}>
-      {icon}
-      <Text style={{ color: color, fontFamily: focused ? 'Quicksand-Bold' : 'Quicksand-Regular' }}>
-        {name}
-      </Text>
+    <Tabs>
+      <Tabs.Screen
+        name="index"
+        options={{
+          title: 'Inicio',
+          tabBarIcon: ({ focused, color, size }) => (
+            <Ionicons name={focused ? 'home' : 'home-outline'} size={size} color={color} />
+          ),
+        }}
+      />
+      <Tabs.Screen
+        name="settings"
+        options={{
+          title: 'Ajustes',
+          // Si dibujás tu propio texto dentro de tabBarIcon, el título por
+          // defecto se sigue mostrando y queda duplicado. Esto lo oculta:
+          tabBarShowLabel: false,
+          tabBarIcon: ({ focused, color, size }) => (
+            <View style={{ alignItems: 'center', gap: 2 }}>
+              <Ionicons name={focused ? 'settings' : 'settings-outline'} size={size} color={color} />
+              <Text style={{ color, fontSize: 10, fontFamily: focused ? 'Quicksand-Bold' : 'Quicksand-Regular' }}>
+                Ajustes
+              </Text>
+            </View>
+          ),
+        }}
+      />
+    </Tabs>
+  );
+}`,
+		},
+		{
+			type: "callout",
+			alertType: "tip",
+			text: "Regla práctica: si dentro de `tabBarIcon` dibujás tu propio `<Text>`, siempre agregá `tabBarShowLabel: false`. Si dejás el ícono solo, no hace falta: el título por defecto se muestra.",
+		},
+
+		{ type: "paragraph", text: "**Íconos Personalizados desde Assets:**" },
+		{
+			type: "paragraph",
+			text: "Además de las librerías de íconos, podés usar tus propios archivos de imagen (PNG, etc.) como íconos, importándolos desde `assets/icons` con `require()`.",
+		},
+		{ type: "divider" },
+
+		{
+			type: "subtitle",
+			text: "4. Configuración de la app: ícono y splash screen",
+		},
+		{
+			type: "paragraph",
+			text: "El archivo `app.json` es el centro de configuración de tu app. Ahí definís el ícono de la aplicación y configurás la splash screen **con plugins**, no con la propiedad `splash`: esa propiedad fue eliminada de la configuración de Expo en SDK 56.",
+		},
+		{
+			type: "code",
+			language: "json",
+			code: `{
+  "expo": {
+    "icon": "./assets/images/icon.png",
+    "ios": {
+      "icon": "./assets/expo.icon"
+    },
+    "plugins": [
+      "expo-router",
+      [
+        "expo-splash-screen",
+        {
+          "backgroundColor": "#208AEF",
+          "image": "./assets/images/splash-icon.png",
+          "imageWidth": 76,
+          "resizeMode": "contain"
+        }
+      ]
+    ]
+  }
+}`,
+		},
+		{
+			type: "list",
+			items: [
+				"**`icon`:** la imagen principal de la app. En el proyecto nuevo de Expo es `./assets/images/icon.png`.",
+				"**`ios.icon`:** apunta a `./assets/expo.icon`, que es una **carpeta** con el formato Icon Composer de Apple. Si tu proyecto no la tiene, borrá esa línea.",
+				"**Plugin `expo-splash-screen`:** reemplaza la vieja propiedad `splash`. La imagen del splash tiene que ser un **PNG**; con otros formatos el build de producción falla.",
+			],
+		},
+		{ type: "divider" },
+
+		{
+			type: "subtitle",
+			text: "5. Tarea Práctica: Pantalla con imágenes, íconos y tipografía propia",
+		},
+		{
+			type: "paragraph",
+			text: "Para consolidar lo aprendido, armá una pantalla de perfil que combine imágenes locales y remotas, íconos vectoriales y una tipografía propia, y aprovechá para llevar los íconos y la fuente a la barra de navegación inferior (Tab Bar) de tu app. Esta tarea es individual: prepará una demo de cómo quedó y contá qué decisiones tomaste y por qué.",
+		},
+		{
+			type: "list",
+			items: [
+				"**1. Instalación:** agregá los paquetes que vas a usar: `bun expo install expo-image expo-asset` y `bun add @react-native-vector-icons/ionicons`.",
+				"**2. Preparación:** verificá que tengas una fuente personalizada en `assets/fonts/` y que esté cargada en `src/app/_layout.tsx` (o embebida con el plugin de `expo-font`).",
+				"**3. Tailwind:** agregá la fuente personalizada al `tailwind.config.js` y reiniciá el servidor con `bun expo start --clear` para que el tema se regenere.",
+				"**4. Imágenes:** en la pantalla nueva, mostrá una imagen local con `expo-image` (con `contentFit` y `transition`) y una remota por URL (con su `cachePolicy`).",
+				"**5. Íconos:** en `src/app/(tabs)/_layout.tsx`, usá la prop `tabBarIcon` para definir los íconos de cada pestaña, y hacé que el ícono cambie entre el estado activo y el inactivo.",
+				"**6. Cuidado con el título:** si tu ícono custom incluye un texto, agregá `tabBarShowLabel: false` para que el título no quede duplicado.",
+				"**7. Resultado esperado:** al ejecutar la app deberías ver la pantalla con las imágenes, los íconos en la barra inferior que cambian de estilo cuando están activos, y el texto usando la fuente que configuraste.",
+			],
+		},
+		{
+			type: "code",
+			language: "jsx",
+			code: `// src/app/profile.tsx
+import { Image } from 'expo-image';
+import Ionicons from '@react-native-vector-icons/ionicons';
+import { Text, View } from 'react-native';
+
+export default function ProfileScreen() {
+  return (
+    <View style={{ flex: 1, alignItems: 'center', gap: 12, padding: 24 }}>
+      {/* 1. Reemplazá este bloque por la imagen local con expo-image */}
+      <View style={{ width: 120, height: 120, backgroundColor: '#e4e4e7' }} />
+
+      {/* 2. Reemplazá este bloque por la imagen remota con expo-image */}
+
+      {/* 3. Mostrá un ícono de Ionicons */}
+
+      {/* 4. Usá la fuente Quicksand (con NativeWind: className, o con fontFamily) */}
+      <Text style={{ fontSize: 20 }}>Mi perfil</Text>
     </View>
   );
-};
-
-// ... en el componente de Layout
-<Tabs.Screen
-  name="home"
-  options={{
-    title: 'Home',
-    tabBarIcon: ({ color, focused }) => (
-      <TabIcon
-        icon={<Ionicons name={focused ? 'home' : 'home-outline'} size={24} color={color} />}
-        color={color}
-        name="Home"
-        focused={focused}
-      />
-    ),
-  }}
-/>`,
+}`,
 		},
 		{
-			type: "paragraph",
-			text: "**Resultado Esperado:** Al ejecutar la aplicación, deberías ver los íconos personalizados en la barra de navegación inferior, que cambian de estilo cuando están activos, y el texto debería usar la fuente personalizada que has configurado.",
-		},
-		{ type: "divider" },
-		{ type: "heading", text: "¡Pon a prueba tus conocimientos!" },
-		{
-			type: "quiz",
-			questions: [
-				{
-					question:
-						"¿Cuál es la forma correcta de incluir una imagen local en un componente de React Native?",
-					options: [
-						"source={require('../assets/image.png')}",
-						'src="../assets/image.png"',
-						'source="../assets/image.png"',
-						"source={{ uri: '../assets/image.png' }}",
-					],
-					correctAnswer: 0,
-				},
-				{
-					question:
-						"¿Qué hook de `expo-font` se recomienda para cargar fuentes personalizadas en tu aplicación?",
-					options: ["loadAsync", "useFonts", "useEffect", "Font.loadAsync"],
-					correctAnswer: 1,
-				},
-				{
-					question:
-						"Para usar íconos del conjunto Ionicons en tu componente, ¿cuál es la declaración de importación correcta?",
-					options: [
-						"import { Ionicons } from 'react-native-vector-icons';",
-						"import { Icon } from '@expo/vector-icons';",
-						"import { Ionicons } from '@expo/vector-icons';",
-						"import { Ionicons } from 'expo-icons';",
-					],
-					correctAnswer: 2,
-				},
-				{
-					question:
-						"Si usas TypeScript e importas un archivo PNG, ¿qué debes hacer para evitar errores de tipo?",
-					options: [
-						"Ignorar el error, es solo una advertencia.",
-						"Crear un archivo `images.d.ts` y declarar el módulo `*.png`.",
-						"Hacer un cast de la declaración require a `any`.",
-						"Instalar `@types/images`.",
-					],
-					correctAnswer: 1,
-				},
-			],
+			type: "callout",
+			alertType: "tip",
+			text: "Si la imagen local te sale en blanco, revisá que el path sea literal y que el archivo exista en `assets/images/`. Si te sale distortionada, ajustá `contentFit`.",
 		},
 	],
 };
