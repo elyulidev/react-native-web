@@ -22,13 +22,14 @@ export const conference6: CurriculumTopic = {
 		{
 			type: "list",
 			items: [
-				"**1. Instalar NativeWind y dependencias:** `nativewind` necesita `react-native-reanimated` y `react-native-safe-area-context` como peer dependencies. En Expo SDK 57, Reanimated 4 va acompañado de `react-native-worklets`. Como devDependencies agregás `tailwindcss`, el plugin de Prettier y `babel-preset-expo`, que es el preset que se usa en el paso 3.",
+				"**1. Instalar NativeWind y dependencias:** `nativewind` necesita `react-native-reanimated` y `react-native-safe-area-context` como peer dependencies. En Expo SDK 57, Reanimated 4 va acompañado de `react-native-worklets`, que se instala aparte con `bun expo install react-native-worklets`. Como devDependencies agregás `tailwindcss`, el plugin de Prettier y `babel-preset-expo`, que es el preset que se usa en el paso 3.",
 			],
 		},
 		{
 			type: "code",
 			language: "bash",
-			code: `bun add nativewind@4.2.7\nbun expo install react-native-reanimated react-native-worklets react-native-safe-area-context\nbun add --dev tailwindcss@^3.4.17 prettier-plugin-tailwindcss@^0.5.11 babel-preset-expo`,
+			code: `bun add nativewind@4.2.7 react-native-reanimated react-native-safe-area-context
+bun add --dev tailwindcss@^3.4.17 prettier-plugin-tailwindcss@^0.5.11 babel-preset-expo`,
 		},
 		{
 			type: "callout",
