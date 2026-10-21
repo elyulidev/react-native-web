@@ -55,14 +55,21 @@ Every element inside `content` has a `type` field. Available types:
 | type | Shape | Notes |
 |---|---|---|
 | `heading` | `{ text: string }` | Section heading |
-| `subtitle` | `{ text: string }` | Sub-section heading |
+| `subtitle` | `{ text: string, id?: string }` | Sub-section heading. `id` is the anchor used by the TOC |
 | `paragraph` | `{ text: string }` | Body text (supports bold `**...**` and inline `` `code` ``) |
 | `divider` | `{}` | Visual divider |
-| `code` | `{ language: string, code: string }` | Code block. Language is always `"bash"` or `"typescript"` |
+| `code` | `{ language: string, code: string }` | Code block. `language` is free-form and mapped in `src/components/code-block.tsx` (`jsx` → javascript, `tsx` → typescript, plus `bash`, `typescript`, `javascript`, `json`, `css`) |
+| `list` | `{ items: (string \| { text: string; subItems?: string[] })[] }` | Bulleted or numbered list. Each item may be an object with `subItems` |
 | `image` | `{ imageUrl: string, caption?: string }` | Image + optional caption |
-| `featureCard` | `{ featureItems: [{ icon, title, text }] }` | Grid of feature cards |
-| `callout` | `{ alertType: "info"\|"warning"\|"danger"\|"tip", text: string }` | Highlighted callout box |
+| `featureCard` | `{ featureItems: [{ icon, title, text }] }` | Grid of feature cards. `icon` must be a key of the `icons` map in `src/components/content-display.tsx` (e.g. `CodeBracketIcon`, `ArrowPathIcon`, `SparklesIcon`, `RectangleStackIcon`) |
+| `callout` | `{ alertType: "info"\|"warning"\|"tip", text: string }` | Highlighted callout box. `danger` is NOT a valid `alertType` in `src/types/types.ts` |
 | `twoColumn` | `{ columns: [{ title, content: string[] }] }` | Two-column comparison (used for RN vs Web) |
+| `quiz` | `{ questions: [{ question, options: string[], correctAnswer: number }] }` | Multiple-choice quiz. `correctAnswer` is a **zero-based index** into `options` |
+| `fileStructure` | `{ files: FileItem[] }` | File tree with per-file description |
+| `componentGrid` | `{ componentGridItems: [{ id, title, icon }] }` | Grid of component cards |
+| `assignment` | `{ assignmentId: string, description?: string[] }` | Assignment card linked to a submission |
+| `evaluationCards` | `{ evaluationCards: EvaluationCardData[] }` | Grading/evaluation links |
+| `bibliographyCards` | `{ bibliographyCards: BibliographyCardData[] }` | External references (PDF or link) |
 
 ### Block list for a conference
 
@@ -127,7 +134,14 @@ Use these when editing conferences to keep content current:
 | React Native | 0.87. New Architecture is default/only since 0.82 (`"nueva arquitectura"` is outdated) |
 | Expo SDK | 57. `npx expo start` / `bun expo start` |
 | SafeAreaView | Core version is iOS-only. Always recommend `react-native-safe-area-context` |
-| StyleSheet.create | Does not improve performance. Recommend NativeWind as this course's styling approach |
+| StyleSheet.create | Does **not** improve performance (the gain was removed in RN 0.56). Its real benefit is static type checking + code organization. RN 0.87 docs: "the main practical benefit … is static type checking". Never claim it is faster than inline styles, and never mention "the native bridge" (it does not exist since 0.82) |
+| Styling approach | Recommend NativeWind as this course's styling approach (see conf-6) |
+| Shadows | `boxShadow` works on Android and iOS since RN 0.76 (New Architecture, the only one). Before that: `elevation` (Android) + `shadowColor`/`shadowOffset`/`shadowOpacity`/`shadowRadius` (iOS) |
+| Flexbox spacing | `gap` / `rowGap` / `columnGap` are supported since RN 0.71 and are the recommended way to space children |
+| `display: flex` | Never write it. Every `<View>` is a flex container by default in React Native (in the web you must set it on a `div`) |
+| `flex: 1` | Shorthand for `flexGrow: 1`, `flexShrink: 1`, `flexBasis: '0%'`. Explain it the first time it appears: it makes a child grow into the leftover space |
+| Light/dark theme | `useColorScheme` is a built-in RN hook that returns the system preference. Use it as the default before adding a manual `ThemeContext` |
+| Secrets vs preferences | `expo-secure-store` is for secrets (tokens, keys). Use `AsyncStorage` for UI preferences such as the selected theme |
 | Event mapping (web) | `onHoverIn` → `onPressIn` (NOT `onMouseOver` → `onLongPress`) |
 | Airbnb + React Native | Abandoned in 2018. Replace with Shopify and Discord in company lists |
 | Tesla + React Native | No confirmed production use. Do not list. |
