@@ -22,28 +22,38 @@ export const conference6: CurriculumTopic = {
 		{
 			type: "list",
 			items: [
-				"**1. Instalar o Nativewind e dependências:** Você precisará do `nativewind` e das suas dependências `react-native-reanimated` e `react-native-safe-area-context`. Também é uma boa prática instalar o `tailwindcss` e um plugin do Prettier para formatação.",
+				"**1. Instalar o NativeWind e as dependências:** o `nativewind` precisa de `react-native-reanimated` e `react-native-safe-area-context` como peer dependencies. No Expo SDK 57, o Reanimated 4 vem acompanhado do `react-native-worklets`. Como devDependencies você adiciona o `tailwindcss`, o plugin do Prettier e o `babel-preset-expo`, que é o preset usado no passo 3.",
 			],
 		},
 		{
 			type: "code",
 			language: "bash",
-			code: `npm install nativewind react-native-reanimated react-native-safe-area-context\nnpm install -D tailwindcss@^3.4.17 prettier-plugin-tailwindcss@^0.5.11\npnpm add nativewind react-native-reanimated react-native-safe-area-context\npnpm add -D @^3.4.17 prettier-plugin-tailwindcss@^0.5.11`,
+			code: `bun add nativewind@4.2.7\nbun expo install react-native-reanimated react-native-worklets react-native-safe-area-context\nbun add --dev tailwindcss@^3.4.17 prettier-plugin-tailwindcss@^0.5.11 babel-preset-expo`,
+		},
+		{
+			type: "callout",
+			alertType: "info",
+			text: "**Versão atual:** o NativeWind v4.2.7 adiciona suporte ao Expo SDK 57 e inclui o `react-native-css-interop` 0.2.7. Ele mantém a configuração do Tailwind CSS 3, o preset de Babel do NativeWind e a integração `withNativeWind(config, { input })`, então atualizar dentro da v4 não exige migração para a v5. Reinicie o Metro depois de atualizar e refaça o build do app nativo se você trocou dependências nativas.",
+		},
+		{
+			type: "callout",
+			alertType: "tip",
+			text: "**Atalho:** se preferir começar do zero, `bunx rn-new --nativewind` cria um projeto Expo com o NativeWind e o Tailwind já configurados.",
 		},
 		{
 			type: "list",
 			items: [
-				"**2. Configurar o Tailwind CSS:** Execute `npx tailwindcss init` o `pnpm tailwindcss init` para criar o seu ficheiro `tailwind.config.js`. Em seguida, configure-o para analisar os seus ficheiros e adicione o preset do NativeWind.",
+				"**2. Configurar o Tailwind CSS:** Execute `bunx tailwindcss init` para criar o seu ficheiro `tailwind.config.js`. Em seguida, configure-o para analisar os seus ficheiros e adicione o preset do NativeWind.",
 			],
 		},
 		{
 			type: "code",
 			language: "javascript",
-			code: `// tailwind.config.js\n/** @type {import('tailwindcss').Config} */\nmodule.exports = {\n  content: ["./app/**/*.{js,jsx,ts,tsx}", "./components/**/*.{js,jsx,ts,tsx}"],\n  presets: [require("nativewind/preset")],\n  theme: {\n    extend: {},\n  },\n  plugins: [],\n};`,
+			code: `// tailwind.config.js\n/** @type {import('tailwindcss').Config} */\nmodule.exports = {\n  // NOTE: atualize isto para incluir os caminhos de todos os arquivos que contêm classes do NativeWind.\n  content: ["./src/**/*.{js,jsx,ts,tsx}"],\n  presets: [require("nativewind/preset")],\n  theme: {\n    extend: {},\n  },\n  plugins: [],\n};`,
 		},
 		{
 			type: "paragraph",
-			text: "De seguida, crie um ficheiro chamado `global.css` na raiz do seu projeto e adicione as diretivas do Tailwind.",
+			text: "A seguir, abra o ficheiro `src/global.css` que já vem no template do Expo e adicione as diretivas do Tailwind no início. As variáveis `--font-*` que já estão lá são preservadas: você apenas acrescenta as diretivas.",
 		},
 		{
 			type: "code",
@@ -70,18 +80,18 @@ export const conference6: CurriculumTopic = {
 		{
 			type: "code",
 			language: "javascript",
-			code: `// metro.config.js\nconst { getDefaultConfig } = require("expo/metro-config");\nconst { withNativeWind } = require('nativewind/metro');\n\nconst config = getDefaultConfig(__dirname);\n\nmodule.exports = withNativeWind(config, { input: './global.css' });`,
+			code: `// metro.config.js\nconst { getDefaultConfig } = require("expo/metro-config");\nconst { withNativeWind } = require('nativewind/metro');\n\nconst config = getDefaultConfig(__dirname);\n\nmodule.exports = withNativeWind(config, { input: './src/global.css' });`,
 		},
 		{
 			type: "list",
 			items: [
-				"**5. Importar o seu ficheiro CSS:** Importe o ficheiro CSS que acabou de criar no seu layout raiz (`app/_layout.tsx`).",
+				"**5. Importar o seu ficheiro CSS:** Importe o ficheiro CSS que acabou de configurar no seu layout raiz (`src/app/_layout.tsx`).",
 			],
 		},
 		{
 			type: "code",
 			language: "typescript",
-			code: `// app/_layout.tsx\nimport "../global.css";\n// ... resto do código`,
+			code: `// src/app/_layout.tsx\nimport "../global.css";\n// ... resto do código`,
 		},
 		{
 			type: "list",
@@ -97,7 +107,7 @@ export const conference6: CurriculumTopic = {
 		{
 			type: "list",
 			items: [
-				"**7. Configuração do TypeScript (Opcional):** Para obter IntelliSense e segurança de tipos, crie um ficheiro `nativewind-env.d.ts` na raiz e adicione a seguinte diretiva:",
+				"**7. Configuração do TypeScript (opcional):** Para obter IntelliSense e segurança de tipos, crie um ficheiro `nativewind-env.d.ts` na raiz e adicione a seguinte diretiva:",
 			],
 		},
 		{
@@ -108,7 +118,12 @@ export const conference6: CurriculumTopic = {
 		{
 			type: "callout",
 			alertType: "warning",
-			text: "Importante! Após a configuração, reinicie completamente o servidor de desenvolvimento (`npx expo start --clear`) para garantir que todas as alterações sejam aplicadas corretamente.",
+			text: "**Cuidado com o nome do ficheiro:** não o chame de `nativewind.d.ts`, nem com o mesmo nome de outro ficheiro ou pasta do mesmo diretório (por exemplo `app.d.ts` se existir uma pasta `/app`), nem com o nome de uma pasta de `node_modules` (por exemplo `react.d.ts`). Se fizer isso, o TypeScript não vai recolher os tipos.",
+		},
+		{
+			type: "callout",
+			alertType: "warning",
+			text: "Importante! Após a configuração, reinicie completamente o servidor de desenvolvimento (`bun expo start --clear`) para garantir que todas as alterações sejam aplicadas corretamente.",
 		},
 
 		{ type: "divider" },
@@ -143,7 +158,7 @@ export const conference6: CurriculumTopic = {
 
 		{ type: "divider" },
 
-		{ type: "subtitle", text: "4. Gestão de `globals.css`" },
+		{ type: "subtitle", text: "4. Gestão de `global.css`" },
 		{
 			type: "paragraph",
 			text: 'Embora o Tailwind seja "utility-first", por vezes quererá criar as suas próprias classes compostas ou "componentes" que encapsulam várias utilidades. Pode defini-las no `global.css` para uma reutilização fácil.',
