@@ -17,6 +17,11 @@ export const conference9: CurriculumTopic = {
 			text: "O coração do Expo Router é o diretório `app`. Cada arquivo que você cria dentro de `app` torna-se automaticamente uma rota na sua aplicação.",
 		},
 		{
+			type: "callout",
+			alertType: "info",
+			text: "`app` ou `src/app`: os projetos criados com o template oficial (`bun create expo`) colocam o diretório de rotas em `src/app/`. O Expo Router também aceita um diretório `app/` na raiz do projeto; ambas as localizações são equivalentes. Nesta conferência usamos `app/` por brevidade: se o seu projeto tiver `src/app/`, tudo o que vê aqui funciona igual, antecedendo `src/` a cada rota.",
+		},
+		{
 			type: "list",
 			items: [
 				"Um arquivo chamado `index.tsx` mapeia para a rota raiz do diretório que o contém.",
@@ -56,6 +61,19 @@ export default function HomeScreen() {
 			text: "Um **Stack Navigator** (Navegador de Pilha) gere as telas numa pilha, como um baralho de cartas. Quando navega para uma nova tela, ela é colocada no topo da pilha. Ao voltar atrás, ela é removida da pilha.",
 		},
 		{
+			type: "stackDemo",
+			stackDemo: {
+				screens: [
+					{ id: "index", route: "/", name: "Início" },
+					{ id: "details", route: "/details", name: "Detalhes" },
+					{ id: "profile", route: "/profile", name: "Perfil" },
+				],
+				backLabel: "Voltar atrás",
+				resetLabel: "Reiniciar",
+				caption: "Experimente a pilha: push coloca uma tela nova no topo, Voltar atrás remove a visível e replace a substitui sem deixá-la no histórico.",
+			},
+		},
+		{
 			type: "paragraph",
 			text: "Vamos modificar o `app/_layout.tsx` para definir um Stack que controle as nossas telas:",
 		},
@@ -83,7 +101,7 @@ export default function RootLayout() {
 		{ type: "subtitle", text: "3. Criando uma Segunda Rota e Navegando" },
 		{
 			type: "paragraph",
-			text: "Vamos criar uma nova tela. Crie um arquivo chamado `app/details.tsx`. Isto criará automaticamente a rota `/details`.",
+			text: "Vamos criar uma nova tela. Crie um arquivo chamado `app/details.tsx`. Isso cria automaticamente a rota `/details`.",
 		},
 		{
 			type: "code",
@@ -102,26 +120,45 @@ export default function DetailsScreen() {
 		},
 		{
 			type: "paragraph",
-			text: "Agora, debemos registar esta nova tela no nosso Stack Navigator dentro de `app/_layout.tsx`:",
+			text: "E agora? Nada: criar o arquivo foi suficiente. O Expo Router registra cada arquivo do diretório no navegador que o envolve, de modo que a rota `/details` já existe e o Stack já sabe como mostrá-la.",
 		},
 		{
-			type: "code",
-			language: "jsx",
-			code: `
-import { Stack } from 'expo-router';
-
-export default function RootLayout() {
-  return (
-    <Stack>
-      <Stack.Screen name="index" />
-      <Stack.Screen name="details" />
-    </Stack>
-  );
-}`,
+			type: "fileStructure",
+			files: [
+				{
+					id: "layout",
+					name: "app/_layout.tsx",
+					description: [
+						"Define o Stack Navigator que envolve todas as telas do diretório `app`.",
+						"É aqui que personalizamos as telas quando precisamos (títulos, estilos do cabeçalho), mas não é o registro das rotas.",
+					],
+				},
+				{
+					id: "index",
+					name: "app/index.tsx",
+					description: [
+						"A tela inicial, a rota `/`.",
+						"É a primeira rota do Stack, por isso o navegador a carrega por padrão.",
+					],
+				},
+				{
+					id: "details",
+					name: "app/details.tsx",
+					description: [
+						"Torna-se automaticamente a rota `/details`.",
+						"Criar o arquivo alcança: declará-la no layout só se faz se quisermos configurar opções para ela.",
+					],
+				},
+			],
+		},
+		{
+			type: "callout",
+			alertType: "warning",
+			text: "Erro comum: pensar que cada tela tem de ser «registada» manualmente em `_layout.tsx`. Não é assim. Se você adicionou `app/data.tsx`, a rota `/data` já funciona. `<Stack.Screen>` é opcional e serve apenas para configurar opções (título, estilos do cabeçalho).",
 		},
 		{
 			type: "paragraph",
-			text: "Para navegar entre telas, usamos o componente `<Link>` do `expo-router`. É o equivalente à tag `<a>` na web. Vamos modificar o `app/index.tsx` para adicionar um link para a tela de detalhes.",
+			text: "Para navegar entre telas de forma declarativa, usamos o componente `<Link>` do `expo-router`. É o equivalente à tag `<a>` na web. Vamos modificar o `app/index.tsx` para adicionar um link para a tela de detalhes.",
 		},
 		{
 			type: "code",
@@ -147,10 +184,63 @@ export default function HomeScreen() {
 		},
 		{ type: "divider" },
 
-		{ type: "subtitle", text: "4. Configuração de Opções de Tela" },
+		{
+			type: "subtitle",
+			text: "4. Navegação Programática com `router`",
+		},
 		{
 			type: "paragraph",
-			text: "Podemos personalizar a aparência de cada tela no Stack, como o título do cabeçalho. Isto é feito através da propriedade `options` em `Stack.Screen`.",
+			text: "`<Link>` é navegação **declarativa**: você descreve o destino no JSX e o componente trata do resto. Mas muitas navegações acontecem após uma ação do usuário, como enviar um formulário ou confirmar um salvamento. Para esses casos, o Expo Router exporta o hook `useRouter`, que devolve um objeto `router` com métodos de navegação.",
+		},
+		{
+			type: "code",
+			language: "jsx",
+			code: `
+import { View, Text, Button } from 'react-native';
+import { useRouter } from 'expo-router';
+
+export default function HomeScreen() {
+  const router = useRouter();
+
+  return (
+    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', gap: 10 }}>
+      <Text>Tela Inicial</Text>
+      <Button
+        title="Ir para Detalhes"
+        onPress={() => router.push('/details')}
+      />
+      <Button title="Voltar atrás" onPress={() => router.back()} />
+    </View>
+  );
+}`,
+		},
+		{
+			type: "twoColumn",
+			columns: [
+				{
+					title: "`<Link>`: declarativa",
+					content: [
+						"Descreve-se no JSX: `<Link href=\"/details\">`.",
+						"Ideal para conteúdo visível: listas, cartões, menus.",
+						"É o equivalente da tag `<a>` da web.",
+					],
+				},
+				{
+					title: "`router`: programática",
+					content: [
+						"Executa-se como código: `router.push('/details')`.",
+						"Ideal para ações dentro de callbacks: envios, confirmações, fluxos.",
+						"`router.back()` regressa à tela anterior e `router.replace('/')` navega substituindo a tela atual no histórico.",
+					],
+				},
+			],
+		},
+		{ type: "divider" },
+
+		{ type: "subtitle", text: "5. Configuração de Opções de Tela" },
+		{
+			type: "paragraph",
+			text: "Podemos personalizar a aparência de cada tela no Stack, como o título do cabeçalho. Isso é feito através da propriedade `options` em `Stack.Screen`.",
 		},
 		{
 			type: "code",
@@ -160,74 +250,190 @@ import { Stack } from 'expo-router';
 
 export default function RootLayout() {
   return (
-    <Stack>
-      <Stack.Screen
-        name="index"
-        options={{
-          title: 'Início'
-        }}
-      />
-      <Stack.Screen
-        name="details"
-        options={{
-          title: 'Detalhes da App',
-          headerStyle: { backgroundColor: '#f4511e' },
-          headerTintColor: '#fff',
-        }}
-      />
+    <Stack
+      screenOptions={{
+        headerStyle: { backgroundColor: '#f4511e' },
+        headerTintColor: '#fff',
+      }}
+    >
+      <Stack.Screen name="index" options={{ title: 'Início' }} />
+      <Stack.Screen name="details" options={{ title: 'Detalhes da App' }} />
     </Stack>
   );
 }`,
 		},
 		{
 			type: "paragraph",
-			text: "Também podemos aplicar opções a todo o Stack de uma só vez usando a prop `screenOptions` no componente `<Stack>`.",
+			text: "Com `screenOptions` definimos opções comuns para todas as telas do Stack de uma só vez; cada `<Stack.Screen>` pode sobrescrever com o seu próprio `options` o que precisar.",
 		},
 		{ type: "divider" },
 
-		{ type: "heading", text: "Teste os seus conhecimentos!" },
+		{ type: "subtitle", text: "6. Tarefa Prática: Navega a Pilha" },
 		{
-			type: "quiz",
-			questions: [
-				{
-					question: "Que ficheiro define a rota raiz `/` no Expo Router?",
-					options: [
-						"app/_layout.tsx",
-						"app/root.tsx",
-						"app/index.tsx",
-						"app/home.tsx",
-					],
-					correctAnswer: 2,
-				},
-				{
-					question:
-						"Para que é utilizado principalmente o ficheiro `_layout.tsx`?",
-					options: [
-						"Para definir estilos globais.",
-						"Para declarar variáveis de estado globais.",
-						"Para configurar a estrutura de navegação de um diretório (como um Stack ou Tabs).",
-						"Para exportar componentes reutilizáveis.",
-					],
-					correctAnswer: 2,
-				},
-				{
-					question:
-						"Que componente é usado para navegar programaticamente entre rotas no Expo Router?",
-					options: ["<Button>", "<Navigate>", "<a href...>", "<Link>"],
-					correctAnswer: 3,
-				},
-				{
-					question:
-						"Em `<Stack.Screen name='profile' />`, a que ficheiro de rota se refere `name='profile'`?",
-					options: [
-						"app/profile/index.tsx",
-						"app/Profile.tsx",
-						"app/profile.tsx",
-						"app/(tabs)/profile.js",
-					],
-					correctAnswer: 2,
-				},
+			type: "assignment",
+			assignmentId: "conf-9-stack-tres-rutas",
+			description: [
+				"**Requisitos:**",
+				"1. Crie duas novas telas: `app/profile.tsx` e `app/settings.tsx`. **Não declare nenhuma das duas dentro de `<Stack>`**: o registro automático deve tratar disso.",
+				"2. No `app/index.tsx` adicione um `<Link>` para `/profile` e um `<Button>` que navegue para `/settings` com `router.push`.",
+				"3. No `app/settings.tsx` adicione um botão «Voltar» que execute `router.back()`.",
+				"4. No `app/_layout.tsx` use `screenOptions` para aplicar a todas as telas um `backgroundColor` de cabeçalho em comum e um `headerTintColor` legível.",
+				"5. Personalize o título do `app/profile.tsx` —sem declará-la no layout— renderizando `<Stack.Screen options={{ title: 'Meu Perfil' }} />` dentro da tela.",
+				"A solução de referência conta com um componente `Pantalla` reutilizável: as quatro telas apenas declaram o nome do seu arquivo, e toda a lógica de navegação (`push`, `replace`, `back`, `dismissAll`) vive num único lugar.",
 			],
+			code: `
+// app/_layout.tsx
+import { Stack } from 'expo-router';
+
+export default function RootLayout() {
+  return (
+    <Stack
+      screenOptions={{
+        headerStyle: { backgroundColor: '#f4511e' },
+        headerTintColor: '#fff',
+      }}
+    >
+      {/* Apenas o título do início; profile e settings registram-se sozinhas */}
+      <Stack.Screen name="index" options={{ title: 'Início' }} />
+    </Stack>
+  );
+}
+
+// components/Pantalla.tsx — tela comum reutilizável
+import { Pressable, StyleSheet, Text, View } from 'react-native';
+import { useRouter } from 'expo-router';
+
+type Props = {
+  arquivo: string; // apenas para mostrar em tela, ex. "app/details.tsx"
+};
+
+function Boton({
+  texto,
+  onPress,
+  deshabilitado = false,
+}: {
+  texto: string;
+  onPress: () => void;
+  deshabilitado?: boolean;
+}) {
+  return (
+    <Pressable
+      onPress={onPress}
+      disabled={deshabilitado}
+      style={({ pressed }) => [
+        styles.boton,
+        pressed && styles.botonPresionado,
+        deshabilitado && styles.botonDeshabilitado,
+      ]}
+    >
+      <Text style={styles.botonTexto}>{texto}</Text>
+    </Pressable>
+  );
+}
+
+export default function Pantalla({ archivo }: Props) {
+  const router = useRouter();
+  const hayAnterior = router.canGoBack();
+
+  return (
+    <View style={styles.contenedor}>
+      <Text style={styles.archivo}>{archivo}</Text>
+
+      <View style={styles.acciones}>
+        {/* push: adiciona uma tela no topo da pilha */}
+        <Boton texto="push Detalhes" onPress={() => router.push('/details')} />
+        <Boton texto="push Perfil" onPress={() => router.push('/profile')} />
+        <Boton texto="push Ajustes" onPress={() => router.push('/settings')} />
+
+        {/* replace: troca a tela atual sem crescer a pilha */}
+        <Boton texto="replace Ajustes" onPress={() => router.replace('/settings')} />
+
+        {/* back: remove a tela de cima */}
+        <Boton texto="back" onPress={() => router.back()} deshabilitado={!hayAnterior} />
+
+        {/* dismissAll: volta à primeira tela da pilha */}
+        <Boton
+          texto="dismissAll"
+          onPress={() => router.dismissAll()}
+          deshabilitado={!hayAnterior}
+        />
+      </View>
+    </View>
+  );
+}
+
+const styles = StyleSheet.create({
+  contenedor: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 24,
+    padding: 24,
+  },
+  archivo: {
+    fontFamily: 'monospace',
+    fontSize: 14,
+    color: '#555',
+  },
+  acciones: {
+    width: '100%',
+    gap: 10,
+  },
+  boton: {
+    paddingVertical: 12,
+    borderRadius: 8,
+    borderWidth: 1,
+    borderColor: '#bbb',
+    alignItems: 'center',
+    backgroundColor: '#fff',
+  },
+  botonPresionado: { backgroundColor: '#eee' },
+  botonDeshabilitado: { opacity: 0.4 },
+  botonTexto: { fontSize: 15 },
+});
+
+// app/index.tsx
+import { Link } from 'expo-router';
+import Pantalla from '../components/Pantalla';
+
+export default function Inicio() {
+  return (
+    <>
+      <Link href="/profile" style={{ alignSelf: 'center', margin: 12 }}>
+        Ir ao perfil
+      </Link>
+      <Pantalla archivo="app/index.tsx" />
+    </>
+  );
+}
+
+// app/details.tsx
+import Pantalla from '../components/Pantalla';
+
+export default function Detalles() {
+  return <Pantalla arquivo="app/details.tsx" />;
+}
+
+// app/profile.tsx — título próprio sem declará-la no layout
+import { Stack } from 'expo-router';
+import Pantalla from '../components/Pantalla';
+
+export default function Perfil() {
+  return (
+    <>
+      <Stack.Screen options={{ title: 'Meu Perfil' }} />
+      <Pantalla arquivo="app/profile.tsx" />
+    </>
+  );
+}
+
+// app/settings.tsx
+import Pantalla from '../components/Pantalla';
+
+export default function Ajustes() {
+  return <Pantalla arquivo="app/settings.tsx" />;
+}
+`,
 		},
 	],
 };
