@@ -10,6 +10,7 @@ import type {
 } from "../types/types";
 import { CodeBlock } from "./code-block";
 import { StackDemo } from "./stack-demo";
+import { CodeTabs } from "./code-tabs";
 
 import {
 	saveQuizAttempt,
@@ -911,6 +912,8 @@ const ContentPartRenderer: React.FC<{
 			return <ComponentGrid items={part.componentGridItems || []} />;
 		case "stackDemo":
 			return <StackDemo data={part.stackDemo || { screens: [], backLabel: "", resetLabel: "", caption: "" }} />;
+		case "codeTabs":
+			return <CodeTabs files={part.codeTabs || []} />;
 		case "quiz":
 			return (
 				<Quiz

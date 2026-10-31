@@ -31,6 +31,12 @@ export interface StackDemoData {
 	caption: string;
 }
 
+export interface CodeFileTab {
+	name: string;
+	language: string;
+	code: string;
+}
+
 export interface EvaluationCardData {
 	lang: Language;
 	title: string;
@@ -64,6 +70,7 @@ export interface ContentPart {
 		| "fileStructure"
 		| "componentGrid"
 		| "stackDemo"
+		| "codeTabs"
 		| "assignment"
 		| "evaluationCards"
 		| "bibliographyCards";
@@ -93,6 +100,7 @@ export interface ContentPart {
 		icon: string;
 	}[];
 	stackDemo?: StackDemoData;
+	codeTabs?: CodeFileTab[];
 	// Assignment properties
 	assignmentId?: string;
 	description?: string[];
