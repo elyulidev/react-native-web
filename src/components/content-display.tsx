@@ -9,6 +9,7 @@ import type {
 	AssignmentSubmission,
 } from "../types/types";
 import { CodeBlock } from "./code-block";
+import { StackDemo } from "./stack-demo";
 
 import {
 	saveQuizAttempt,
@@ -908,6 +909,8 @@ const ContentPartRenderer: React.FC<{
 			return <FileStructure files={part.files || []} />;
 		case "componentGrid":
 			return <ComponentGrid items={part.componentGridItems || []} />;
+		case "stackDemo":
+			return <StackDemo data={part.stackDemo || { screens: [], backLabel: "", resetLabel: "", caption: "" }} />;
 		case "quiz":
 			return (
 				<Quiz

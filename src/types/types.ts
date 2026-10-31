@@ -18,6 +18,19 @@ export interface FileItem {
 	description: string[];
 }
 
+export interface StackDemoScreen {
+	id: string;
+	route: string;
+	name: string;
+}
+
+export interface StackDemoData {
+	screens: StackDemoScreen[];
+	backLabel: string;
+	resetLabel: string;
+	caption: string;
+}
+
 export interface EvaluationCardData {
 	lang: Language;
 	title: string;
@@ -50,6 +63,7 @@ export interface ContentPart {
 		| "quiz"
 		| "fileStructure"
 		| "componentGrid"
+		| "stackDemo"
 		| "assignment"
 		| "evaluationCards"
 		| "bibliographyCards";
@@ -78,6 +92,7 @@ export interface ContentPart {
 		title: string;
 		icon: string;
 	}[];
+	stackDemo?: StackDemoData;
 	// Assignment properties
 	assignmentId?: string;
 	description?: string[];
