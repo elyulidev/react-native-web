@@ -24,29 +24,51 @@ export const conference10: CurriculumTopic = {
 			text: "Vamos reestruturar o nosso projeto. Crie uma pasta `app/(tabs)` e mova o seu ficheiro `index.tsx`. De seguida, crie uma nova tela `settings.tsx` dentro de `(tabs)`. Certifique-se de que `details.tsx` fica fora do grupo.",
 		},
 		{
-			type: "list",
-			items: [
-				"**`app/(tabs)/index.tsx`**: Será a nossa primeira aba (Início).",
-				"**`app/(tabs)/settings.tsx`**: Será a nossa segunda aba (Definições).",
-				"**`app/details.tsx`**: Fica fora do grupo `(tabs)` para não aparecer na barra de abas.",
+			type: "callout",
+			alertType: "info",
+			text: "Basta mover os ficheiros: qualquer rota dentro de `(tabs)` torna-se uma aba automaticamente, sem a declarar no `_layout.tsx`. Além disso, os parênteses do nome do grupo fazem com que `(tabs)` desapareça do URL final (`/settings`, nunca `/(tabs)/settings`).",
+		},
+		{
+			type: "fileStructure",
+			files: [
+				{
+					id: "root-layout",
+					name: "app/_layout.tsx",
+					description: [
+						"Layout raiz com o Stack Navigator da aplicação.",
+						"Envolve as telas fora do grupo (como `details.tsx`) e, como mais uma tela, o grupo `(tabs)`.",
+					],
+				},
+				{
+					id: "tabs-layout",
+					name: "app/(tabs)/_layout.tsx",
+					description: [
+						"Define o Tab Navigator que envolve as rotas do grupo.",
+						"É aqui que se personalizam ícones, títulos e cores da barra.",
+					],
+				},
+				{
+					id: "tabs-index",
+					name: "app/(tabs)/index.tsx",
+					description: [
+						"A primeira aba (Início), a rota raiz `/`.",
+					],
+				},
+				{
+					id: "tabs-settings",
+					name: "app/(tabs)/settings.tsx",
+					description: [
+						"A segunda aba (Definições), a rota `/settings`.",
+					],
+				},
+				{
+					id: "details",
+					name: "app/details.tsx",
+					description: [
+						"Fora do grupo: ao navegar para ela, empilha-se sobre a barra de abas e oculta-a.",
+					],
+				},
 			],
-		},
-		{
-			type: "paragraph",
-			text: "A sua nova estrutura de ficheiros deve parecer-se com isto:",
-		},
-		{
-			type: "code",
-			language: "bash",
-			code: `
-app/
-├── (tabs)/
-│   ├── _layout.tsx      # Layout para o Tab Navigator
-│   ├── index.tsx        # Tela da primeira aba (Home)
-│   └── settings.tsx     # Tela da segunda aba (Settings)
-├── _layout.tsx          # Layout Raiz (Stack Navigator)
-└── details.tsx          # Tela de detalhes (acessível a partir de Home)
-      `,
 		},
 		{ type: "divider" },
 
@@ -73,7 +95,7 @@ export default function TabLayout() {
 		},
 		{
 			type: "paragraph",
-			text: "Finalmente, devemos dizer ao nosso layout raiz (`app/_layout.tsx`) para renderizar este grupo de abas como uma única tela dentro do Stack.",
+			text: "E o layout raiz? Não é preciso «registar» nada: como todos os ficheiros vivem dentro de `app/`, o Expo Router já monta o grupo `(tabs)` automaticamente sobre o Stack. A única razão para adicionar `<Stack.Screen name='(tabs)'>` é **configurá-lo**, por exemplo para ocultar o seu cabeçalho:",
 		},
 		{
 			type: "code",
@@ -93,8 +115,8 @@ export default function RootLayout() {
 		},
 		{
 			type: "callout",
-			alertType: "tip",
-			text: "Usamos `headerShown: false` na tela `(tabs)` para ocultar o cabeçalho do Stack e deixar que cada aba gira o seu próprio, se necessário. Isto evita um cabeçalho duplo.",
+			alertType: "warning",
+			text: "Erro comum: pensar que `<Stack.Screen name='(tabs)'>` é necessário para que o grupo exista. O layout raiz já renderiza `(tabs)` por fazer parte de `app/`; a entrada serve apenas para passar-lhe opções — como `headerShown: false`, que oculta o cabeçalho do Stack e evita um cabeçalho duplo.",
 		},
 		{ type: "divider" },
 
@@ -112,7 +134,7 @@ export default function RootLayout() {
 			code: `
 // app/(tabs)/_layout.tsx
 import { Tabs } from 'expo-router';
-import { Ionicons } from '@expo/vector-icons';
+import { Ionicons } from '@react-native-vector-icons/ionicons';
 
 export default function TabLayout() {
   return (
@@ -160,49 +182,320 @@ export default function TabLayout() {
 		{
 			type: "callout",
 			alertType: "info",
-			text: "Se quisesse que uma tela fosse mostrada *dentro* do Tab Navigator (substituindo o conteúdo mas mantendo a barra de abas), deveria colocar o seu ficheiro dentro do diretório `(tabs)` e registá-lo no layout das abas (`app/(tabs)/_layout.tsx`).",
+			text: "Se quisesse que uma tela fosse mostrada *dentro* do Tab Navigator (substituindo o conteúdo mas mantendo a barra de abas), basta mover o seu ficheiro para dentro de `(tabs)`: ao criar o ficheiro, o grupo monta-o automaticamente como uma aba a mais.",
+		},
+		{
+			type: "twoColumn",
+			columns: [
+				{
+					title: "Ficheiro fora de `(tabs)`",
+					content: [
+						"Como `app/details.tsx`: pertence ao Stack raiz.",
+						"Ao navegar, a tela empilha-se sobre as abas e oculta-as.",
+						"**Ideal para:** telas de detalhe e fluxos temporais.",
+					],
+				},
+				{
+					title: "Ficheiro dentro de `(tabs)`",
+					content: [
+						"Como `app/settings.tsx`: pertence ao grupo de abas.",
+						"Ao criar o ficheiro, torna-se mais uma aba, sem configuração.",
+						"**Ideal para:** secções principais da app.",
+					],
+				},
+			],
+		},
+		{
+			type: "paragraph",
+			text: "Vejamos a interação completa num exemplo interativo. As abas `index` e `settings` vivem dentro de `(tabs)`, e `details.tsx` está fora, no Stack raiz: ao fazer `push`, abre-se por cima das abas (cobre a barra inferior) e com `back` regressa à aba de onde saiu. A receita de navegação: `router.push()` para empilhar um detalhe, `router.navigate()` para saltar de aba, `router.back()` para remover e `router.dismissAll()` para esvaziar a pilha até às abas.",
+		},
+		{
+			type: "codeTabs",
+			codeTabs: [
+				{
+					name: "app/_layout.tsx",
+					language: "tsx",
+					code: `
+import { Stack } from 'expo-router';
+
+export default function RootLayout() {
+  return (
+    <Stack screenOptions={{ headerTitleAlign: 'center' }}>
+      {/* O grupo (tabs) traz a sua própria barra; ocultamos o header do Stack */}
+      <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+      <Stack.Screen name="details" options={{ title: 'Detalhes' }} />
+    </Stack>
+  );
+}`,
+				},
+				{
+					name: "app/(tabs)/_layout.tsx",
+					language: "tsx",
+					code: `
+import { Tabs } from 'expo-router';
+import { Ionicons } from '@react-native-vector-icons/ionicons';
+
+export default function TabsLayout() {
+  return (
+    <Tabs screenOptions={{ headerTitleAlign: 'center' }}>
+      <Tabs.Screen
+        name="index"
+        options={{
+          title: 'Início',
+          tabBarIcon: ({ color, size }) => (
+            <Ionicons name="home-outline" color={color} size={size} />
+          ),
+        }}
+      />
+      <Tabs.Screen
+        name="settings"
+        options={{
+          title: 'Definições',
+          tabBarIcon: ({ color, size }) => (
+            <Ionicons name="settings-outline" color={color} size={size} />
+          ),
+        }}
+      />
+    </Tabs>
+  );
+}`,
+				},
+				{
+					name: "app/(tabs)/index.tsx",
+					language: "tsx",
+					code: `
+import { Pressable, StyleSheet, Text, View } from 'react-native';
+import { useRouter } from 'expo-router';
+
+export default function Inicio() {
+  const router = useRouter();
+
+  return (
+    <View style={styles.contenedor}>
+      <Text style={styles.ruta}>app/(tabs)/index.tsx</Text>
+
+      {/* push: abre details por cima das abas */}
+      <Pressable style={styles.boton} onPress={() => router.push('/details')}>
+        <Text>push Detalhes</Text>
+      </Pressable>
+
+      {/* navigate: muda para a outra aba */}
+      <Pressable style={styles.boton} onPress={() => router.navigate('/settings')}>
+        <Text>ir para Definições</Text>
+      </Pressable>
+    </View>
+  );
+}
+
+const styles = StyleSheet.create({
+  contenedor: { flex: 1, alignItems: 'center', justifyContent: 'center', gap: 12, padding: 24 },
+  ruta: { fontFamily: 'monospace', fontSize: 13, color: '#555', marginBottom: 12 },
+  boton: {
+    width: '100%',
+    paddingVertical: 12,
+    borderRadius: 8,
+    borderWidth: 1,
+    borderColor: '#bbb',
+    alignItems: 'center',
+    backgroundColor: '#fff',
+  },
+}`,
+				},
+				{
+					name: "app/(tabs)/settings.tsx",
+					language: "tsx",
+					code: `
+import { Pressable, StyleSheet, Text, View } from 'react-native';
+import { useRouter } from 'expo-router';
+
+export default function Ajustes() {
+  const router = useRouter();
+
+  return (
+    <View style={styles.contenedor}>
+      <Text style={styles.ruta}>app/(tabs)/settings.tsx</Text>
+
+      <Pressable style={styles.boton} onPress={() => router.push('/details')}>
+        <Text>push Detalhes</Text>
+      </Pressable>
+
+      <Pressable style={styles.boton} onPress={() => router.navigate('/')}>
+        <Text>ir para Início</Text>
+      </Pressable>
+    </View>
+  );
+}
+
+const styles = StyleSheet.create({
+  contenedor: { flex: 1, alignItems: 'center', justifyContent: 'center', gap: 12, padding: 24 },
+  ruta: { fontFamily: 'monospace', fontSize: 13, color: '#555', marginBottom: 12 },
+  boton: {
+    width: '100%',
+    paddingVertical: 12,
+    borderRadius: 8,
+    borderWidth: 1,
+    borderColor: '#bbb',
+    alignItems: 'center',
+    backgroundColor: '#fff',
+  },
+}`,
+				},
+				{
+					name: "app/details.tsx",
+					language: "tsx",
+					code: `
+import { Pressable, StyleSheet, Text, View } from 'react-native';
+import { useRouter } from 'expo-router';
+
+export default function Detalhes() {
+  const router = useRouter();
+
+  return (
+    <View style={styles.contenedor}>
+      <Text style={styles.ruta}>app/details.tsx</Text>
+
+      {/* back: remove details e regressa à aba de origem */}
+      <Pressable
+        style={[styles.boton, !router.canGoBack() && styles.deshabilitado]}
+        disabled={!router.canGoBack()}
+        onPress={() => router.back()}
+      >
+        <Text>back</Text>
+      </Pressable>
+
+      {/* replace: substitui details por outra rota sem deixar histórico */}
+      <Pressable style={styles.boton} onPress={() => router.replace('/settings')}>
+        <Text>replace Definições</Text>
+      </Pressable>
+
+      {/* dismissAll: fecha tudo o que está empilhado e regressa às abas */}
+      <Pressable style={styles.boton} onPress={() => router.dismissAll()}>
+        <Text>dismissAll</Text>
+      </Pressable>
+    </View>
+  );
+}
+
+const styles = StyleSheet.create({
+  contenedor: { flex: 1, alignItems: 'center', justifyContent: 'center', gap: 12, padding: 24 },
+  ruta: { fontFamily: 'monospace', fontSize: 13, color: '#555', marginBottom: 12 },
+  boton: {
+    width: '100%',
+    paddingVertical: 12,
+    borderRadius: 8,
+    borderWidth: 1,
+    borderColor: '#bbb',
+    alignItems: 'center',
+    backgroundColor: '#fff',
+  },
+  deshabilitado: { opacity: 0.4 },
+}`,
+				},
+			],
+		},
+		{
+			type: "callout",
+			alertType: "info",
+			text: "Como o `details.tsx` vive no Stack raiz, não mostra a barra de abas. Se a quisesse visível, mova o seu ficheiro para dentro de `(tabs)` e —apenas para configurar opções— adicione `<Tabs.Screen name='details' options={{ href: null }} />`: a tela deixa de aparecer na barra, mas continua navegável.",
+		},
+		{
+			type: "callout",
+			alertType: "tip",
+			text: "Os ícones (`home-outline`, `settings-outline`) pertencem ao set Ionicons de `@react-native-vector-icons/ionicons`. E ao ter `headerShown: false` na tela `(tabs)` do Stack raiz, o cabeçalho de cada aba é desenhado pelo próprio `<Tabs />`.",
 		},
 		{ type: "divider" },
 
-		{ type: "heading", text: "Teste os seus conhecimentos!" },
+		{ type: "subtitle", text: "5. Tarefa Prática: Adiciona uma Aba" },
 		{
-			type: "quiz",
-			questions: [
-				{
-					question:
-						"Como se cria um grupo de rotas no Expo Router para organizar ficheiros sem afetar o URL?",
-					options: [
-						"Usando uma pasta com colchetes, ex. [tabs]",
-						"Usando uma pasta com parênteses, ex. (tabs)",
-						"Usando um ficheiro especial chamado _group.tsx",
-						"Não é possível agrupar rotas.",
-					],
-					correctAnswer: 1,
-				},
-				{
-					question:
-						"Que componente do `expo-router` é utilizado para criar uma navegação por abas?",
-					options: ["<Stack>", "<Navigator>", "<Tabs>", "<BottomBar>"],
-					correctAnswer: 2,
-				},
-				{
-					question:
-						"Nas opções do `Tabs.Screen`, que propriedade é usada para definir o ícone da aba?",
-					options: ["icon", "tabBarIcon", "renderIcon", "iconComponent"],
-					correctAnswer: 1,
-				},
-				{
-					question:
-						"Se tiver um Stack Navigator raiz e um Tab Navigator aninhado, por que é comum usar `headerShown: false` na tela do grupo de abas?",
-					options: [
-						"Para melhorar o desempenho.",
-						"Para evitar que seja mostrado um cabeçalho duplo (o do Stack e o da aba).",
-						"Porque os Tab Navigators não suportam cabeçalhos.",
-						"Para permitir gestos de deslize.",
-					],
-					correctAnswer: 1,
-				},
+			type: "assignment",
+			assignmentId: "conf-10-tabs-nueva-pestana",
+			description: [
+				"**Requisitos:**",
+				"1. Cria o `app/(tabs)/profile.tsx` com uma tela simples. **Não a registes**: criar o ficheiro deve fazê-la aparecer na barra logo.",
+				"2. No `app/(tabs)/_layout.tsx` adiciona `<Tabs.Screen name='profile'>` apenas para configurá-la: `title` e `tabBarIcon` (por exemplo, o ícone `person` do Ionicons).",
+				"3. Aplica `screenOptions` com `tabBarActiveTintColor` comum para todas as abas.",
+				"4. Verifica que o `app/details.tsx` fica fora do grupo: ao navegar desde Início, a tela empilha-se sobre a barra e oculta-a.",
+				"5. Confirma que o `app/_layout.tsx` mantém `headerShown: false` na tela `(tabs)`: ao entrar em Detalhes não deve ver-se um cabeçalho duplo.",
+				"A solução de referência contém as três abas configuradas — repara que o `profile` existe porque criaste o ficheiro; o `Tabs.Screen` apenas lhe aporta ícone e título.",
 			],
+			code: `
+// app/(tabs)/_layout.tsx
+import { Tabs } from 'expo-router';
+import { Ionicons } from '@react-native-vector-icons/ionicons';
+
+export default function TabLayout() {
+  return (
+    <Tabs
+      screenOptions={{
+        tabBarActiveTintColor: '#f4511e',
+      }}
+    >
+      <Tabs.Screen
+        name="index"
+        options={{
+          title: 'Início',
+          tabBarIcon: ({ color, size }) => (
+            <Ionicons name="home" size={size} color={color} />
+          ),
+        }}
+      />
+      <Tabs.Screen
+        name="settings"
+        options={{
+          title: 'Definições',
+          tabBarIcon: ({ color, size }) => (
+            <Ionicons name="settings" size={size} color={color} />
+          ),
+        }}
+      />
+      {/* profile.tsx não se declara para existir: criar o ficheiro alcança.
+          O Tabs.Screen apenas aporta opções (ícone e título). */}
+      <Tabs.Screen
+        name="profile"
+        options={{
+          title: 'Perfil',
+          tabBarIcon: ({ color, size }) => (
+            <Ionicons name="person" size={size} color={color} />
+          ),
+        }}
+      />
+    </Tabs>
+  );
+}
+
+// app/_layout.tsx
+import { Stack } from 'expo-router';
+
+export default function RootLayout() {
+  return (
+    <Stack>
+      {/* Configuração, não registro: oculta o cabeçalho do Stack */}
+      <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+      <Stack.Screen name="details" options={{ title: 'Detalhes' }} />
+    </Stack>
+  );
+}
+
+// app/(tabs)/profile.tsx
+import { View, Text, StyleSheet } from 'react-native';
+
+export default function Perfil() {
+  return (
+    <View style={styles.contenedor}>
+      <Text>Aba de Perfil</Text>
+    </View>
+  );
+}
+
+const styles = StyleSheet.create({
+  contenedor: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 10,
+  },
+});
+`,
 		},
 	],
 };
