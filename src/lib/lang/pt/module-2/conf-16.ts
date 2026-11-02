@@ -12,12 +12,6 @@ export const conference16: CurriculumTopic = {
 			type: "paragraph",
 			text: "É hora de consolidar tudo o que aprendemos no Módulo 2! Neste projeto, construiremos uma aplicação de blog simples, mas completa. Integraremos um Stack Navigator, um Tab Navigator, rotas dinâmicas para os artigos e uma estrutura de ficheiros lógica usando grupos de rotas.",
 		},
-		{
-			type: "image",
-			imageUrl:
-				"https://storage.googleapis.com/aistudio-hosting/bootcamp-assets/blog-app-nav-structure.png",
-			caption: "Estrutura de navegação da nossa aplicação de blog.",
-		},
 		{ type: "divider" },
 
 		{ type: "subtitle", text: "Passo 1: Estrutura de Ficheiros do Projeto" },
